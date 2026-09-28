@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PraxisSAMA · Régions du corps</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbfaff; --bg2:#f4f3fe; --panel:#ffffff; --bdr:#e4e2f7;
+  --txt:#211f38; --txt2:#726f96; --indigo:#6366f1; --indigo-dk:#4338ca;
+  --gold:#f5a623; --red:#e8604a; --green:#22c55e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Poppins',system-ui,sans-serif;
+  background:linear-gradient(160deg,var(--bg) 0%,var(--bg2) 100%);
+  color:var(--txt);min-height:100vh;padding-bottom:60px;
+}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 0 6px}
+.back-link{display:flex;align-items:center;gap:6px;color:var(--txt2);text-decoration:none;font-size:13px}
+.back-link svg{width:20px;height:20px}
+.btn-legende{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--indigo-dk);
+  background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);
+  padding:6px 12px;border-radius:20px;cursor:pointer;
+}
+
+header{padding:16px 0 20px}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;letter-spacing:1px;color:var(--indigo-dk);background:rgba(99,102,241,.1);
+  border:1px solid rgba(99,102,241,.3);padding:5px 12px;border-radius:20px;margin-bottom:12px;
+}
+h1{font-weight:700;font-size:clamp(24px,5.5vw,32px);letter-spacing:-.3px}
+.tagline{color:var(--txt2);font-size:14px;margin-top:8px;max-width:480px;line-height:1.6}
+
+.tabs{display:flex;gap:8px;margin:22px 0 16px}
+.tab{
+  flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;
+  padding:10px;border-radius:10px;border:1.5px solid var(--bdr);
+  background:var(--panel);color:var(--txt2);cursor:pointer;transition:all .15s;
+}
+.tab.active{background:rgba(99,102,241,.12);border-color:var(--indigo);color:var(--indigo-dk)}
+
+.consigne{
+  background:var(--panel);border:1.5px solid var(--indigo);border-radius:14px;
+  padding:14px 18px;text-align:center;margin-bottom:14px;box-shadow:0 2px 10px rgba(67,56,202,.06);
+}
+.consigne .label{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--txt2);letter-spacing:1px}
+.consigne .cible{font-weight:700;font-size:19px;color:var(--indigo-dk);margin-top:4px}
+
+.silhouette-wrap{background:var(--panel);border:1px solid var(--bdr);border-radius:14px;padding:12px;box-shadow:0 2px 10px rgba(67,56,202,.05)}
+svg.silhouette{width:100%;height:auto;display:block;margin:0 auto;max-width:280px}
+.zone{fill:#e4e2f7;stroke:#ffffff;stroke-width:1.5;cursor:pointer;transition:fill .12s}
+.zone:hover{fill:#c7c4f5}
+.zone.ok{fill:var(--green) !important}
+.zone.ko{fill:var(--red) !important}
+.zone.reveal{fill:var(--gold) !important}
+.deco{fill:#f0eefc;stroke:none}
+
+.feedback{text-align:center;font-size:13px;margin-top:10px;min-height:20px;font-weight:600}
+.feedback.ok{color:var(--green)}
+.feedback.ko{color:var(--red)}
+
+.score-box{
+  text-align:center;padding:24px;background:var(--panel);border:1.5px solid var(--bdr);
+  border-radius:16px;margin-top:16px;display:none;box-shadow:0 2px 10px rgba(67,56,202,.05);
+}
+.score-box.show{display:block}
+.score-num{font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:700;color:var(--indigo-dk)}
+.score-msg{font-size:13.5px;color:var(--txt2);margin-top:6px}
+.btn-recommencer{
+  margin-top:14px;padding:10px 20px;border-radius:10px;border:1.5px solid var(--indigo);
+  background:transparent;color:var(--indigo-dk);font-weight:600;font-size:13px;cursor:pointer;font-family:'Poppins',sans-serif;
+}
+
+.overlay{display:none;position:fixed;inset:0;background:rgba(33,31,56,.7);z-index:300;align-items:center;justify-content:center;padding:16px}
+.overlay.show{display:flex}
+.overlay-inner{background:#fff;border-radius:14px;padding:14px;max-width:900px;max-height:90vh;overflow:auto}
+.overlay-inner img{width:100%;display:block;border-radius:8px}
+.overlay-close{display:block;margin:10px auto 0;padding:9px 20px;border-radius:8px;border:1.5px solid var(--indigo);background:transparent;color:var(--indigo-dk);font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif}
+
+footer{text-align:center;padding:30px 20px 10px;color:var(--txt2);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <a class="back-link" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      PraxisSAMA
+    </a>
+    <div class="btn-legende" onclick="document.getElementById('overlay').classList.add('show')">📋 Voir la légende</div>
+  </div>
+
+  <header>
+    <div class="badge">RÉGIONS DU CORPS</div>
+    <h1>Traduire le langage du patient</h1>
+    <p class="tagline">« J'ai mal dans le bas du dos » → région lombaire. Cliquez la zone demandée sur la silhouette.</p>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" onclick="choisirVue(0)">Vue de face</div>
+    <div class="tab" onclick="choisirVue(1)">Vue de dos</div>
+  </div>
+
+  <div class="consigne">
+    <div class="label">CLIQUEZ SUR :</div>
+    <div class="cible" id="cible">—</div>
+  </div>
+
+  <div class="silhouette-wrap">
+    <svg id="svg-face" class="silhouette" viewBox="0 0 200 420" xmlns="http://www.w3.org/2000/svg" style="display:block">
+      <!-- Tête -->
+      <circle class="zone" data-nom="Tête" cx="100" cy="28" r="20"/>
+      <!-- Cou -->
+      <rect class="zone" data-nom="Cou" x="88" y="46" width="24" height="18" rx="3"/>
+      <!-- Epaules -->
+      <rect class="zone" data-nom="Épaule" x="52" y="64" width="26" height="20" rx="4"/>
+      <rect class="zone" data-nom="Épaule" x="122" y="64" width="26" height="20" rx="4"/>
+      <!-- Thorax -->
+      <rect class="zone" data-nom="Thorax" x="78" y="64" width="44" height="76" rx="6"/>
+      <!-- Bras -->
+      <rect class="zone" data-nom="Bras" x="48" y="84" width="26" height="76" rx="6"/>
+      <rect class="zone" data-nom="Bras" x="126" y="84" width="26" height="76" rx="6"/>
+      <!-- Coudes -->
+      <rect class="zone" data-nom="Coude" x="46" y="160" width="26" height="18" rx="4"/>
+      <rect class="zone" data-nom="Coude" x="128" y="160" width="26" height="18" rx="4"/>
+      <!-- Avant-bras -->
+      <rect class="zone" data-nom="Avant-bras" x="44" y="178" width="26" height="56" rx="6"/>
+      <rect class="zone" data-nom="Avant-bras" x="130" y="178" width="26" height="56" rx="6"/>
+      <!-- Poignets -->
+      <rect class="zone" data-nom="Poignet" x="44" y="234" width="24" height="13" rx="3"/>
+      <rect class="zone" data-nom="Poignet" x="132" y="234" width="24" height="13" rx="3"/>
+      <!-- Mains -->
+      <rect class="zone" data-nom="Main" x="42" y="247" width="26" height="26" rx="6"/>
+      <rect class="zone" data-nom="Main" x="132" y="247" width="26" height="26" rx="6"/>
+      <!-- Abdomen -->
+      <rect class="zone" data-nom="Abdomen" x="78" y="140" width="44" height="42" rx="4"/>
+      <!-- Bassin -->
+      <rect class="zone" data-nom="Bassin" x="73" y="182" width="54" height="26" rx="4"/>
+      <!-- Aine -->
+      <rect class="zone" data-nom="Aine" x="73" y="208" width="54" height="10"/>
+      <!-- Cuisses -->
+      <rect class="zone" data-nom="Cuisse" x="71" y="218" width="26" height="66" rx="6"/>
+      <rect class="zone" data-nom="Cuisse" x="103" y="218" width="26" height="66" rx="6"/>
+      <!-- Genoux -->
+      <rect class="zone" data-nom="Genou" x="71" y="284" width="26" height="20" rx="4"/>
+      <rect class="zone" data-nom="Genou" x="103" y="284" width="26" height="20" rx="4"/>
+      <!-- Jambes -->
+      <rect class="zone" data-nom="Jambe" x="71" y="304" width="26" height="60" rx="6"/>
+      <rect class="zone" data-nom="Jambe" x="103" y="304" width="26" height="60" rx="6"/>
+      <!-- Chevilles -->
+      <rect class="zone" data-nom="Cheville" x="71" y="364" width="24" height="13" rx="3"/>
+      <rect class="zone" data-nom="Cheville" x="105" y="364" width="24" height="13" rx="3"/>
+      <!-- Pieds -->
+      <rect class="zone" data-nom="Pied" x="66" y="377" width="30" height="18" rx="5"/>
+      <rect class="zone" data-nom="Pied" x="104" y="377" width="30" height="18" rx="5"/>
+    </svg>
+
+    <svg id="svg-dos" class="silhouette" viewBox="0 0 200 420" xmlns="http://www.w3.org/2000/svg" style="display:none">
+      <!-- Tête (déco, non cliquable) -->
+      <circle class="deco" cx="100" cy="28" r="20"/>
+      <!-- Nuque -->
+      <rect class="zone" data-nom="Nuque" x="88" y="46" width="24" height="10" rx="2"/>
+      <!-- Région cervicale -->
+      <rect class="zone" data-nom="Région cervicale" x="86" y="56" width="28" height="14" rx="2"/>
+      <!-- Epaules -->
+      <rect class="zone" data-nom="Épaule" x="52" y="64" width="26" height="20" rx="4"/>
+      <rect class="zone" data-nom="Épaule" x="122" y="64" width="26" height="20" rx="4"/>
+      <!-- Bras (déco) -->
+      <rect class="deco" x="48" y="84" width="26" height="150" rx="6"/>
+      <rect class="deco" x="126" y="84" width="26" height="150" rx="6"/>
+      <!-- Région dorsale -->
+      <rect class="zone" data-nom="Région dorsale" x="78" y="70" width="44" height="60" rx="6"/>
+      <!-- Région lombaire -->
+      <rect class="zone" data-nom="Région lombaire" x="78" y="130" width="44" height="40" rx="4"/>
+      <!-- Bassin -->
+      <rect class="zone" data-nom="Bassin" x="73" y="170" width="54" height="24" rx="4"/>
+      <!-- Fesse -->
+      <rect class="zone" data-nom="Fesse" x="71" y="194" width="58" height="34" rx="8"/>
+      <!-- Cuisses -->
+      <rect class="zone" data-nom="Cuisse" x="71" y="228" width="26" height="56" rx="6"/>
+      <rect class="zone" data-nom="Cuisse" x="103" y="228" width="26" height="56" rx="6"/>
+      <!-- Creux poplité -->
+      <rect class="zone" data-nom="Creux poplité" x="71" y="284" width="26" height="18" rx="4"/>
+      <rect class="zone" data-nom="Creux poplité" x="103" y="284" width="26" height="18" rx="4"/>
+      <!-- Mollets -->
+      <rect class="zone" data-nom="Mollet" x="71" y="302" width="26" height="62" rx="6"/>
+      <rect class="zone" data-nom="Mollet" x="103" y="302" width="26" height="62" rx="6"/>
+      <!-- Chevilles -->
+      <rect class="zone" data-nom="Cheville" x="71" y="364" width="24" height="13" rx="3"/>
+      <rect class="zone" data-nom="Cheville" x="105" y="364" width="24" height="13" rx="3"/>
+      <!-- Talons -->
+      <rect class="zone" data-nom="Talon" x="68" y="377" width="26" height="16" rx="5"/>
+      <rect class="zone" data-nom="Talon" x="106" y="377" width="26" height="16" rx="5"/>
+    </svg>
+  </div>
+
+  <div class="feedback" id="feedback"></div>
+
+  <div class="score-box" id="score-box">
+    <div class="score-num" id="score-num">—</div>
+    <div class="score-msg" id="score-msg"></div>
+    <button class="btn-recommencer" onclick="demarrerVue(vueActive)">Recommencer cette vue</button>
+  </div>
+
+  <footer>MEDEXPERT · PRAXIS · RNCP 40800</footer>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="overlay-inner">
+    <img src="regions-reference.png" alt="Légende complète des régions du corps">
+    <button class="overlay-close" onclick="document.getElementById('overlay').classList.remove('show')">Fermer</button>
+  </div>
+</div>
+
+<script>
+const REGIONS_FACE = ["Tête","Cou","Épaule","Thorax","Bras","Coude","Avant-bras","Poignet","Main","Abdomen","Bassin","Aine","Cuisse","Genou","Jambe","Cheville","Pied"];
+const REGIONS_DOS = ["Nuque","Région cervicale","Épaule","Région dorsale","Région lombaire","Bassin","Fesse","Cuisse","Creux poplité","Mollet","Cheville","Talon"];
+
+let vueActive = 0; // 0 = face, 1 = dos
+let file = [];
+let indexActuel = 0;
+let score = 0;
+let bloque = false;
+
+function melange(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+function choisirVue(i){
+  vueActive = i;
+  document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active', idx===i));
+  document.getElementById('svg-face').style.display = i===0 ? 'block' : 'none';
+  document.getElementById('svg-dos').style.display = i===1 ? 'block' : 'none';
+  demarrerVue(i);
+}
+
+function demarrerVue(i){
+  const regions = i===0 ? REGIONS_FACE : REGIONS_DOS;
+  file = melange(regions);
+  indexActuel = 0;
+  score = 0;
+  bloque = false;
+  document.getElementById('score-box').classList.remove('show');
+  document.querySelectorAll('.zone').forEach(z => z.classList.remove('ok','ko','reveal'));
+  document.getElementById('feedback').textContent = '';
+  afficherCible();
+}
+
+function afficherCible(){
+  if(indexActuel >= file.length){
+    document.getElementById('cible').textContent = '—';
+    document.getElementById('score-num').textContent = score + '/' + file.length;
+    document.getElementById('score-msg').textContent =
+      score === file.length ? '🎉 Toutes les régions reconnues !' :
+      score >= file.length - 2 ? '👍 Très solide.' : 'Un tour de plus avec la légende ne ferait pas de mal.';
+    document.getElementById('score-box').classList.add('show');
+    return;
+  }
+  document.getElementById('cible').textContent = file[indexActuel];
+}
+
+function svgActif(){
+  return vueActive === 0 ? document.getElementById('svg-face') : document.getElementById('svg-dos');
+}
+
+function gererClic(e){
+  if(bloque) return;
+  const cible = e.target;
+  if(!cible.classList.contains('zone')) return;
+  if(indexActuel >= file.length) return;
+
+  const nomAttendu = file[indexActuel];
+  const nomClique = cible.dataset.nom;
+  const feedback = document.getElementById('feedback');
+  bloque = true;
+
+  if(nomClique === nomAttendu){
+    cible.classList.add('ok');
+    feedback.textContent = '✅ Exact !';
+    feedback.className = 'feedback ok';
+    score++;
+  } else {
+    cible.classList.add('ko');
+    feedback.textContent = '❌ Ce n\'était pas la bonne zone.';
+    feedback.className = 'feedback ko';
+    // Révéler la ou les bonnes zones
+    svgActif().querySelectorAll(`.zone[data-nom="${nomAttendu}"]`).forEach(z => z.classList.add('reveal'));
+  }
+
+  setTimeout(() => {
+    document.querySelectorAll('.zone').forEach(z => z.classList.remove('ok','ko','reveal'));
+    feedback.textContent = '';
+    indexActuel++;
+    bloque = false;
+    afficherCible();
+  }, 1000);
+}
+
+document.getElementById('svg-face').addEventListener('click', gererClic);
+document.getElementById('svg-dos').addEventListener('click', gererClic);
+
+demarrerVue(0);
+</script>
+</body>
+</html>
