@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PraxisSAMA · QCM d'entraînement</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbfaff; --bg2:#f4f3fe; --panel:#ffffff; --bdr:#e4e2f7;
+  --txt:#211f38; --txt2:#726f96; --indigo:#6366f1; --indigo-dk:#4338ca;
+  --gold:#f5a623; --red:#e8604a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Poppins',system-ui,sans-serif;
+  background:linear-gradient(160deg,var(--bg) 0%,var(--bg2) 100%);
+  color:var(--txt);min-height:100vh;padding-bottom:60px;
+}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+
+.topbar{display:flex;align-items:center;gap:10px;padding:20px 0 6px}
+.back-link{display:flex;align-items:center;gap:6px;color:var(--txt2);text-decoration:none;font-size:13px}
+.back-link svg{width:20px;height:20px}
+
+header{padding:16px 0 20px}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;letter-spacing:1px;color:var(--indigo-dk);background:rgba(99,102,241,.1);
+  border:1px solid rgba(99,102,241,.3);padding:5px 12px;border-radius:20px;margin-bottom:12px;
+}
+h1{font-weight:700;font-size:clamp(24px,5.5vw,32px);letter-spacing:-.3px}
+.tagline{color:var(--txt2);font-size:14px;margin-top:8px;max-width:480px;line-height:1.6}
+
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 6px}
+.tab{
+  font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px;letter-spacing:.5px;
+  padding:9px 14px;border-radius:10px;border:1.5px solid var(--bdr);
+  background:var(--panel);color:var(--txt2);cursor:pointer;transition:all .15s;
+}
+.tab.active{background:rgba(99,102,241,.12);border-color:var(--indigo);color:var(--indigo-dk)}
+.tab:hover{border-color:var(--indigo)}
+
+.qcard{background:var(--panel);border:1.5px solid var(--bdr);border-radius:14px;padding:18px;margin-top:14px;box-shadow:0 2px 10px rgba(67,56,202,.05)}
+.qcard .qnum{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:1px;color:var(--indigo-dk);margin-bottom:8px}
+.qcard .profil{font-size:14px;margin-bottom:12px;line-height:1.55;font-weight:500}
+.qcard .opt{display:block;width:100%;text-align:left;background:var(--bg2);border:1.5px solid var(--bdr);border-radius:10px;color:var(--txt);padding:10px 14px;margin-bottom:7px;font-size:13px;font-family:'Poppins',sans-serif;cursor:pointer;transition:border-color .15s}
+.qcard .opt:hover{border-color:var(--indigo)}
+.qcard .opt.ok{border-color:var(--indigo-dk);background:rgba(99,102,241,.12);color:var(--indigo-dk);font-weight:600}
+.qcard .opt.ko{border-color:var(--red);background:rgba(232,96,74,.08);color:var(--red)}
+.qcard .opt.multi{border-color:var(--gold)}
+.qcard .opt:disabled{cursor:default}
+.qcard .explic{display:none;margin-top:10px;padding:12px 14px;border-radius:10px;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25);font-size:12.5px;line-height:1.6}
+.qcard .explic.show{display:block}
+.qcard .valider-multi{width:100%;padding:10px;margin-top:4px;border-radius:8px;border:1.5px solid var(--indigo);background:transparent;color:var(--indigo-dk);font-weight:600;font-size:12.5px;cursor:pointer;font-family:'Poppins',sans-serif}
+
+.score-box{
+  text-align:center;padding:24px;background:var(--panel);border:1.5px solid var(--bdr);
+  border-radius:16px;margin-top:20px;display:none;box-shadow:0 2px 10px rgba(67,56,202,.05);
+}
+.score-box.show{display:block}
+.score-num{font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:700;color:var(--indigo-dk)}
+.score-msg{font-size:13.5px;color:var(--txt2);margin-top:6px}
+.btn-recommencer{
+  margin-top:14px;padding:10px 20px;border-radius:10px;border:1.5px solid var(--indigo);
+  background:transparent;color:var(--indigo-dk);font-weight:600;font-size:13px;cursor:pointer;font-family:'Poppins',sans-serif;
+}
+
+footer{text-align:center;padding:30px 20px 10px;color:var(--txt2);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <a class="back-link" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      PraxisSAMA
+    </a>
+  </div>
+
+  <header>
+    <div class="badge">RÉVISION</div>
+    <h1>QCM d'entraînement</h1>
+    <p class="tagline">200 questions en 4 tranches progressives — de la définition isolée au cas de synthèse.</p>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" onclick="choisirTranche(0)">1-50</div>
+    <div class="tab" onclick="choisirTranche(1)">51-100</div>
+    <div class="tab" onclick="choisirTranche(2)">101-150</div>
+    <div class="tab" onclick="choisirTranche(3)">151-200</div>
+  </div>
+
+  <div id="zone-qcm"></div>
+
+  <div class="score-box" id="score-box">
+    <div class="score-num" id="score-num">—</div>
+    <div class="score-msg" id="score-msg"></div>
+    <button class="btn-recommencer" onclick="recommencer()">Recommencer cette tranche</button>
+  </div>
+
+  <footer>MEDEXPERT · PRAXIS · RNCP 40800</footer>
+</div>
+
+<script>
+// Chaque question : {q, opts, ok} où ok est un index (QCM simple) ou un tableau d'index (QCM à réponses multiples)
+const TRANCHES = [
+[ // 1-50
+{q:"Deux patientes portent exactement le même nom et prénom dans le logiciel. Quelle conduite est la plus appropriée ?",opts:["Sélectionner le premier dossier affiché","Demander uniquement l'adresse","Vérifier plusieurs traits d'identité avant d'ouvrir le dossier","Créer systématiquement un nouveau dossier"],ok:2,exp:"L'identitovigilance fait partie des exigences du référentiel SAMA."},
+{q:"Le conjoint d'une patiente demande si elle a bien consulté le médecin ce matin. Que faire ?",opts:["Confirmer uniquement l'heure du rendez-vous","Confirmer sa présence sans préciser le motif","Ne pas communiquer l'information sans cadre l'autorisant","Donner l'information si le conjoint connaît sa date de naissance"],ok:2,exp:"La simple présence dans une structure médicale est déjà une information protégée."},
+{q:"Un patient décrit une douleur thoracique intense apparue brutalement. Le rôle du SAMA consiste à :",opts:["Déterminer la pathologie probable","Conseiller un médicament","Appliquer la procédure prévue et orienter rapidement","Proposer le prochain rendez-vous disponible"],ok:2,exp:"Le SAMA accueille et oriente, il ne réalise pas de diagnostic."},
+{q:"Le numéro de téléphone d'un patient a changé. Que faire ?",opts:["Créer un nouveau dossier","Actualiser l'information selon la procédure","Conserver uniquement l'ancien numéro","Supprimer les anciennes données"],ok:1,exp:"L'actualisation du dossier patient est une compétence SAMA."},
+{q:"Le préfixe tachy- signifie généralement :",opts:["Lent","Rapide","Douloureux","Inflammatoire"],ok:1,exp:"Tachycardie = fréquence cardiaque anormalement élevée."},
+{q:"Une néphrectomie correspond à :",opts:["L'examen radiologique du rein","L'inflammation du rein","L'ablation chirurgicale d'un rein","La biopsie du rein"],ok:2,exp:"Néphr- renvoie au rein, -ectomie à l'ablation chirurgicale."},
+{q:"Un médecin dicte un terme médical que le secrétaire n'identifie pas avec certitude. Il doit :",opts:["Choisir le terme le plus probable","Supprimer le passage","Remplacer par un synonyme","Vérifier et, si nécessaire, demander confirmation au professionnel"],ok:3,exp:"Le référentiel demande de vérifier notamment l'orthographe de la terminologie."},
+{q:"Un médecin prend du retard, plusieurs patients attendent. Quelle attitude est professionnelle ?",opts:["Ne rien dire","Annuler les consultations restantes","Informer du retard et réorganiser selon les consignes","Expliquer la raison médicale précise du retard"],ok:2,exp:"Il faut concilier information, organisation et confidentialité."},
+{q:"Un patient demande comment obtenir son dossier médical. Le secrétaire doit :",opts:["Refuser systématiquement","Imprimer immédiatement l'intégralité du dossier","Renseigner sur la procédure et préparer selon les règles","Renvoyer vers l'assurance maladie"],ok:2,exp:"C'est une des compétences explicitement mentionnées dans le RNCP40800."},
+{q:"Un patient mécontent élève la voix car son rendez-vous a été déplacé. Première attitude ?",opts:["Lui demander de quitter les lieux","Répondre sur le même ton","Ignorer ses protestations","Rester calme, écouter et chercher une solution"],ok:3,exp:"Le référentiel prévoit la gestion de situations difficiles d'accueil, dans la limite des responsabilités."},
+{q:"Un patient se présente sans carte Vitale. Quelle attitude adopter ?",opts:["Refuser systématiquement la consultation","Lui demander de revenir avec sa carte","Vérifier son identité et appliquer la procédure administrative","Utiliser la carte Vitale d'un proche"],ok:2,exp:"L'absence de carte Vitale n'interdit pas la prise en charge."},
+{q:"Le suffixe -ite désigne généralement :",opts:["Une ablation","Une inflammation","Une douleur","Un examen"],ok:1,exp:"Bronchite = inflammation des bronches."},
+{q:"En salle d'attente, un patient demande à haute voix pourquoi son voisin consulte. Le SAMA doit :",opts:["Répondre si le motif paraît bénin","Demander au patient concerné s'il accepte","Ne communiquer aucune information","Donner uniquement le nom du spécialiste"],ok:2,exp:"Le motif de consultation est une donnée confidentielle."},
+{q:"Une patiente indique que son nom d'usage a changé après son mariage. Bonne conduite ?",opts:["Supprimer son identité précédente","Créer un deuxième dossier","Vérifier l'identité et actualiser selon les règles","Remplacer le nom de naissance partout"],ok:2,exp:"Il faut distinguer les traits d'identité et éviter les doublons."},
+{q:"Une personne malentendante se présente à l'accueil. Le SAMA doit prioritairement :",opts:["S'adresser à son accompagnant","Parler beaucoup plus fort","Adapter sa communication aux besoins de la personne","Communiquer uniquement par téléphone"],ok:2,exp:"L'accueil doit être adapté aux capacités et besoins de l'usager."},
+{q:"Une hématurie correspond à :",opts:["Du glucose dans les urines","Une absence d'urines","La présence de sang dans les urines","Une infection pulmonaire"],ok:2,exp:"Hém- renvoie au sang, -urie aux urines."},
+{q:"Un patient demande un rendez-vous « en urgence » sans précision. Le SAMA doit :",opts:["Établir lui-même le diagnostic","Attribuer obligatoirement le premier créneau","Recueillir les informations et appliquer la procédure d'orientation","Conseiller un traitement en attendant"],ok:2,exp:"Le SAMA ne réalise ni diagnostic ni prescription."},
+{q:"Un patient demande par téléphone le résultat de son examen biologique. Conduite appropriée ?",opts:["Toujours lui lire les résultats","Interpréter les valeurs anormales","Demander à un autre patient de confirmer son identité","Appliquer la procédure sécurisée de communication des résultats"],ok:3,exp:"Identité du demandeur, confidentialité et règles de transmission doivent être respectées."},
+{q:"Quel organe appartient à l'appareil respiratoire ?",opts:["Rein","Poumon","Pancréas","Vessie"],ok:1,exp:"Les poumons assurent les échanges gazeux respiratoires."},
+{q:"L'abréviation IRM signifie :",opts:["Intervention respiratoire médicale","Imagerie par résonance magnétique","Investigation radiologique manuelle","Imagerie rénale médicale"],ok:1,exp:"L'IRM est une technique d'imagerie médicale."},
+{q:"Deux patients ont été programmés par erreur sur le même créneau. Meilleure réaction ?",opts:["Supprimer arbitrairement l'un des rendez-vous","Laisser le médecin régler ça à leur arrivée","Rechercher une solution et informer les personnes concernées","Modifier sans prévenir"],ok:2,exp:"Le SAMA participe activement à la gestion et l'optimisation du planning."},
+{q:"Une connaissance demande si une célébrité est hospitalisée dans l'établissement.",opts:["Confirmer sans donner le diagnostic","Répondre hors du temps de travail","Confirmer si l'info circule déjà sur Internet","Ne pas communiquer cette information"],ok:3,exp:"Les obligations de confidentialité ne disparaissent ni hors travail ni si une rumeur est publique."},
+{q:"Une gastrectomie désigne :",opts:["Une inflammation gastrique","Une radiographie de l'estomac","L'ablation de tout ou partie de l'estomac","Une analyse du contenu gastrique"],ok:2,exp:"-ectomie = ablation chirurgicale."},
+{q:"Le SAMA découvre deux dossiers semblant appartenir au même patient. Il doit :",opts:["En supprimer immédiatement un","Fusionner lui-même toutes les données","Appliquer la procédure de gestion des doublons","Continuer à utiliser les deux indifféremment"],ok:2,exp:"Une fusion incorrecte peut entraîner l'attribution d'infos au mauvais patient."},
+{q:"Un patient ne comprend pas une consigne administrative. Attitude à privilégier ?",opts:["Répéter exactement la même phrase","Lui demander de chercher sur Internet","Reformuler avec un vocabulaire clair et vérifier la compréhension","Abandonner l'explication"],ok:2,exp:"Reformuler et vérifier la compréhension est la bonne pratique."},
+{q:"Le préfixe hypo- signifie généralement :",opts:["Augmentation","Diminution ou insuffisance","Inflammation","Ablation"],ok:1,exp:"Hypoglycémie = glucose sanguin anormalement bas."},
+{q:"Avant d'envoyer un courrier médical préparé, le SAMA doit notamment :",opts:["Ajouter son interprétation personnelle","Vérifier mise en forme, destinataires et erreurs relevant de son champ","Modifier les conclusions médicales","Simplifier systématiquement le diagnostic"],ok:1,exp:"La vérification formelle relève du SAMA, pas le contenu médical."},
+{q:"Un adolescent se présente en structure médicale. Concernant l'information transmise aux parents :",opts:["Systématiquement tout transmettre","Systématiquement tout refuser","Respecter le cadre légal et les procédures applicables","Décider selon l'âge apparent"],ok:2,exp:"Les droits du mineur et l'autorité parentale imposent une application précise des règles."},
+{q:"Les reins appartiennent principalement à :",opts:["L'appareil respiratoire","L'appareil digestif","L'appareil urinaire","L'appareil locomoteur"],ok:2,exp:"Les reins font partie de l'appareil urinaire."},
+{q:"Un patient devient agressif et menace physiquement le personnel. La priorité est :",opts:["Poursuivre jusqu'à obtenir son accord","Tenter de le maîtriser seul","Appliquer les procédures de sécurité et solliciter l'aide prévue","Fermer l'établissement"],ok:2,exp:"La gestion ne doit exposer personne à un danger."},
+{q:"Un écran avec la liste des patients est visible depuis la salle d'attente. Que faire ?",opts:["Rien si les diagnostics ne sont pas affichés","Empêcher la visibilité par les personnes non autorisées","Masquer uniquement les dates de naissance","Demander aux patients de ne pas regarder"],ok:1,exp:"Toute donnée visible par des tiers non autorisés doit être protégée."},
+{q:"Une dyspnée désigne :",opts:["Une difficulté à avaler","Une difficulté respiratoire","Une difficulté à uriner","Une perte de mémoire"],ok:1,exp:"Dys- = difficulté, -pnée = respiration."},
+{q:"Quelle information doit être recueillie avec particulièrement de soin lors d'une prise de rendez-vous ?",opts:["L'opinion politique","La profession, dans tous les cas","Les informations nécessaires à l'identification et l'organisation","Les revenus"],ok:2,exp:"Seules les informations utiles à l'identification et à l'organisation sont pertinentes."},
+{q:"Le SAMA remarque une incohérence manifeste dans un compte rendu avant envoi. Il doit :",opts:["Corriger lui-même le contenu médical","Envoyer le document malgré tout","Signaler l'incohérence au professionnel concerné","Supprimer la phrase"],ok:2,exp:"Le SAMA signale, il ne modifie pas le contenu médical."},
+{q:"Le terme cardiologie concerne principalement :",opts:["Les reins","La peau","Le cœur et l'appareil cardiovasculaire","Les yeux"],ok:2,exp:"Cardio- = cœur."},
+{q:"Un patient doit consulter plusieurs professionnels. Le rôle administratif du SAMA peut consister à :",opts:["Choisir le traitement","Faciliter l'organisation et la transmission autorisée des informations","Établir le diagnostic","Modifier les prescriptions"],ok:1,exp:"Le SAMA facilite l'organisation, sans intervenir sur le contenu médical."},
+{q:"Un professionnel demande au SAMA son mot de passe personnel pour accéder rapidement au logiciel.",opts:["Le communiquer s'il s'agit d'un médecin","Le communiquer une seule fois","L'écrire sur un papier près de l'ordinateur","Ne pas communiquer ses identifiants personnels"],ok:3,exp:"Les accès nominatifs garantissent sécurité et traçabilité."},
+{q:"Le suffixe -algie désigne :",opts:["Une infection","Une ablation","Une douleur","Une paralysie"],ok:2,exp:"Névralgie = douleur sur le trajet d'un nerf."},
+{q:"Dans un courriel professionnel contenant des données de santé, le SAMA doit :",opts:["Utiliser systématiquement sa messagerie personnelle","Mettre tous les destinataires possibles en copie","Respecter les outils et procédures sécurisés prévus par la structure","Supprimer le nom du patient mais tout envoyer librement"],ok:2,exp:"Seuls les outils et procédures sécurisés prévus sont appropriés."},
+{q:"Le téléphone sonne alors qu'un patient se présente physiquement à l'accueil. Conduite à adopter ?",opts:["Toujours privilégier le téléphone","Toujours raccrocher immédiatement","Gérer les deux sollicitations avec courtoisie selon l'organisation prévue","Ignorer la personne présente"],ok:2,exp:"La gestion simultanée est une situation typique du métier."},
+{q:"Une biopsie consiste à :",opts:["Mesurer la pression artérielle","Prélever un fragment de tissu ou de cellules pour analyse","Enlever obligatoirement un organe entier","Réaliser une vaccination"],ok:1,exp:"La biopsie est un prélèvement à visée d'analyse."},
+{q:"Le SAMA constate qu'un document a été enregistré dans le dossier du mauvais patient. Que doit-il faire ?",opts:["Simplement le supprimer sans rien signaler","Attendre que quelqu'un remarque l'erreur","Appliquer immédiatement la procédure de correction et de signalement","Créer un nouveau dossier pour les deux patients"],ok:2,exp:"Une erreur d'attribution doit être traitée selon les procédures d'identitovigilance."},
+{q:"Un patient demande qui peut consulter son dossier. La réponse du SAMA doit :",opts:["Être inventée selon les habitudes du service","Indiquer que tous les salariés peuvent le consulter","Être conforme aux droits du patient et aux règles d'accès applicables","Indiquer que personne ne peut jamais y accéder"],ok:2,exp:"La réponse doit se conformer au cadre légal réel, ni plus ni moins restrictif."},
+{q:"Une hyperglycémie correspond à :",opts:["Une diminution de la température corporelle","Une diminution du glucose sanguin","Une élévation anormale du glucose sanguin","Une augmentation des globules rouges"],ok:2,exp:"Hyper- = excès, glycémie = taux de glucose sanguin."},
+{q:"Un patient maîtrise difficilement le français. Le SAMA doit :",opts:["Lui demander obligatoirement de revenir avec un proche","Refuser de l'inscrire","Parler plus fort","Rechercher un moyen de communication adapté selon les ressources disponibles"],ok:3,exp:"L'adaptation de la communication reste la bonne pratique."},
+{q:"Un SAMA souhaite raconter sur un réseau social une situation concernant un patient, sans indiquer son nom.",opts:["C'est toujours autorisé si le nom est supprimé","C'est autorisé sur un compte privé","Il doit s'abstenir si la situation peut permettre l'identification du patient","C'est autorisé après les heures de travail"],ok:2,exp:"Le risque d'identification indirecte suffit à interdire le partage."},
+{q:"Une dermatologie est la spécialité principalement consacrée :",opts:["Au système nerveux","Aux reins","Au système digestif","À la peau et à ses affections"],ok:3,exp:"Dermato- = peau."},
+{q:"Une pièce administrative nécessaire manque au dossier d'un patient. Le SAMA doit :",opts:["Inventer l'information manquante","Supprimer le dossier","Identifier la pièce manquante et effectuer les démarches appropriées","Considérer automatiquement le dossier comme complet"],ok:2,exp:"Il faut activement compléter le dossier selon la procédure."},
+{q:"Un patient demande : « À votre avis, ce résultat veut dire que j'ai un cancer ? »",opts:["Lui donner son avis personnel","Rechercher le diagnostic sur Internet","Comparer son résultat à celui d'autres patients","Ne pas interpréter médicalement le résultat et l'orienter vers le professionnel compétent"],ok:3,exp:"Connaître les limites de son champ professionnel est essentiel."},
+{q:"Mme Martin affirme avoir rendez-vous à 10h, mais le logiciel indique Mme Martine, même date de naissance, à 10h. Que faire en premier ?",opts:["Modifier immédiatement le nom dans le logiciel","Créer un nouveau dossier","Considérer qu'il s'agit forcément d'une faute de frappe","Procéder aux vérifications d'identité nécessaires avant toute modification"],ok:3,exp:"Une apparente erreur orthographique peut cacher une homonymie ou une erreur d'identité."},
+],
+[ // 51-100
+{q:"Un patient demande ce que soigne un cardiologue.",opts:["Les maladies de peau","Les maladies rénales","Les maladies du cœur et de l'appareil cardiovasculaire","Les maladies digestives"],ok:2,exp:"Le SAMA doit connaître les principales spécialités pour orienter."},
+{q:"Le terme chronique désigne généralement une maladie :",opts:["Toujours contagieuse","Nécessairement grave","Qui persiste ou évolue sur une longue durée","Qui disparaît en quelques heures"],ok:2,exp:"Chronique s'oppose à aigu (apparition/évolution rapide)."},
+{q:"Quel organe assure principalement la circulation du sang ?",opts:["Le foie","Le cœur","Le rein","Le pancréas"],ok:1,exp:"Le cœur assure la circulation sanguine."},
+{q:"Une patiente diabétique dit que son médecin veut la revoir rapidement. Le SAMA doit :",opts:["Modifier son traitement","Lui conseiller de supprimer le sucre","Organiser son orientation ou son rendez-vous selon les consignes","Déterminer son type de diabète"],ok:2,exp:"Conseiller un traitement ne relève pas du SAMA."},
+{q:"L'hypertension artérielle correspond :",opts:["À une augmentation de la température","À une augmentation du glucose sanguin","À une pression artérielle durablement trop élevée","À une accélération systématique de la respiration"],ok:2,exp:"HTA = pression artérielle durablement trop élevée."},
+{q:"Les poumons se situent principalement :",opts:["Dans le bassin","Dans l'abdomen","Dans le thorax","Dans le crâne"],ok:2,exp:"Les poumons sont situés dans le thorax."},
+{q:"Le terme aigu appliqué à une maladie signifie généralement :",opts:["Qu'elle dure nécessairement plusieurs années","Qu'elle apparaît ou évolue rapidement","Qu'elle est incurable","Qu'elle est contagieuse"],ok:1,exp:"Aigu s'oppose à chronique."},
+{q:"Un patient présentant une affection cutanée est adressé à un :",opts:["Cardiologue","Neurologue","Néphrologue","Dermatologue"],ok:3,exp:"La peau relève de la dermatologie."},
+{q:"La fille adulte d'un patient demande quel traitement son père prend.",opts:["Oui, puisqu'elle est sa fille","Oui, si elle connaît sa date de naissance","Le SAMA doit respecter les règles de confidentialité et ne pas transmettre sans cadre l'autorisant","Oui, mais uniquement le nom du médicament"],ok:2,exp:"Le lien familial seul n'autorise pas la transmission."},
+{q:"Quel est l'os principal de la cuisse ?",opts:["Tibia","Humérus","Fémur","Radius"],ok:2,exp:"Le fémur est l'os de la cuisse."},
+{q:"L'asthme concerne principalement :",opts:["Les reins","Le foie","Les voies respiratoires","Les os"],ok:2,exp:"L'asthme est une maladie inflammatoire chronique des voies respiratoires."},
+{q:"Les reins ont notamment pour fonction :",opts:["De faire circuler le sang","De filtrer le sang et participer à la production de l'urine","De permettre la respiration","De produire la bile"],ok:1,exp:"Les reins filtrent le sang et participent à la production d'urine."},
+{q:"Une fracture est :",opts:["Une inflammation musculaire","Une rupture ou cassure d'un os","Une infection articulaire","Une maladie du sang"],ok:1,exp:"Une fracture est une cassure d'un os."},
+{q:"Quel spécialiste prend principalement en charge les maladies des reins ?",opts:["Neurologue","Néphrologue","Pneumologue","Dermatologue"],ok:1,exp:"Néphro- = rein."},
+{q:"Un patient dit : « J'ai une IRM demain, est-ce que ça va faire mal ? » Le SAMA :",opts:["Garantit que l'examen sera indolore","Donne une explication médicale détaillée","Fournit les informations administratives prévues et oriente les questions médicales","Conseille un antalgique avant l'examen"],ok:2,exp:"Le SAMA reste dans son champ administratif."},
+{q:"L'humérus se situe :",opts:["Dans la cuisse","Dans le bras","Dans le crâne","Dans le bassin"],ok:1,exp:"L'humérus est l'os du bras."},
+{q:"Le diabète est caractérisé notamment par :",opts:["Une anomalie des os","Une régulation anormale du glucose sanguin","Une infection pulmonaire","Une fracture spontanée"],ok:1,exp:"Le diabète concerne la régulation du glucose."},
+{q:"Une hospitalisation ambulatoire signifie généralement que le patient :",opts:["Reste obligatoirement hospitalisé plusieurs semaines","Est pris en charge sans hébergement pour la nuit","Reçoit uniquement des soins à domicile","Est transporté en ambulance"],ok:1,exp:"« Ambulatoire » ne signifie pas « ambulance »."},
+{q:"Le foie est principalement situé :",opts:["Dans le crâne","Dans le petit bassin","Dans la partie supérieure droite de l'abdomen","Derrière le genou"],ok:2,exp:"Le foie est situé en haut à droite de l'abdomen."},
+{q:"Le pneumologue prend principalement en charge :",opts:["Les maladies de peau","Les maladies de l'appareil respiratoire","Les maladies dentaires","Les fractures"],ok:1,exp:"Pneumo- = poumon/respiration."},
+{q:"M. Bernard donne une date de naissance différente de celle du dossier. Le SAMA doit :",opts:["Modifier immédiatement la date","Considérer que le patient se trompe","Suspendre la validation et procéder aux vérifications prévues","Choisir la date la plus vraisemblable"],ok:2,exp:"Toute divergence doit être vérifiée avant modification."},
+{q:"La vessie sert principalement à :",opts:["Filtrer le sang","Stocker l'urine avant son évacuation","Digérer les aliments","Produire les globules rouges"],ok:1,exp:"La vessie stocke l'urine."},
+{q:"Une récidive correspond :",opts:["À la disparition définitive d'une maladie","À la réapparition d'une maladie après amélioration ou disparition","À une erreur administrative","À une vaccination"],ok:1,exp:"Récidive = réapparition de la maladie."},
+{q:"Un patient demande : « Mon PSA est élevé, est-ce que j'ai un cancer ? » Le SAMA doit :",opts:["Répondre oui","Répondre non","Rechercher la réponse sur Internet","Expliquer qu'il ne peut pas interpréter le résultat et orienter"],ok:3,exp:"Le SAMA n'interprète pas les résultats médicaux."},
+{q:"L'arthrose touche principalement :",opts:["Les poumons","Le foie","Les articulations","La thyroïde"],ok:2,exp:"L'arthrose est une maladie articulaire."},
+{q:"La rotule se trouve :",opts:["Au coude","Au poignet","Au genou","À l'épaule"],ok:2,exp:"La rotule est au genou."},
+{q:"Une patiente souhaite que son nouveau numéro de téléphone soit enregistré. Le SAMA :",opts:["Refuse car un dossier ne peut jamais être modifié","Actualise la donnée selon la procédure prévue","Crée un nouveau dossier","Efface son identité précédente"],ok:1,exp:"L'actualisation des coordonnées est une opération courante."},
+{q:"Un neurologue s'occupe principalement :",opts:["Du système digestif","De la peau","Du système nerveux","Des dents"],ok:2,exp:"Neuro- = système nerveux."},
+{q:"Une infection urinaire concerne :",opts:["Uniquement les poumons","Une partie de l'appareil urinaire","Uniquement les articulations","Nécessairement l'estomac"],ok:1,exp:"L'infection urinaire touche l'appareil urinaire."},
+{q:"Une patiente très anxieuse demande cinq fois si son examen est dangereux. Attitude la plus appropriée ?",opts:["Lui dire qu'elle s'inquiète pour rien","Lui garantir qu'il n'existe aucun risque","L'écouter, fournir les informations relevant du SAMA et orienter ses questions médicales","Lui conseiller d'annuler l'examen"],ok:2,exp:"Écouter et orienter, sans garantir ni minimiser."},
+{q:"Le pancréas intervient notamment dans :",opts:["L'audition","La digestion et la régulation de la glycémie","La ventilation pulmonaire","La formation des os"],ok:1,exp:"Le pancréas participe à la digestion et régule la glycémie."},
+{q:"La BPCO est une maladie qui concerne principalement :",opts:["Les reins","Les articulations","L'appareil respiratoire","La peau"],ok:2,exp:"BPCO = maladie pulmonaire obstructive chronique."},
+{q:"Le tibia est situé :",opts:["Dans l'avant-bras","Dans la jambe","Dans le thorax","Dans le crâne"],ok:1,exp:"Le tibia est un os de la jambe."},
+{q:"Un AVC concerne principalement :",opts:["L'estomac","La peau","Le cerveau","Les os"],ok:2,exp:"AVC = accident vasculaire cérébral."},
+{q:"Une personne signale que son conjoint présente brutalement une difficulté à parler et une faiblesse d'un côté du corps. Le SAMA doit :",opts:["Proposer un rendez-vous dans plusieurs jours","Essayer d'identifier lui-même la maladie","Appliquer immédiatement la procédure d'urgence prévue","Envoyer un formulaire administratif"],ok:2,exp:"Ces signes évoquent une urgence à traiter immédiatement selon la procédure."},
+{q:"L'œsophage relie principalement :",opts:["Le cœur aux poumons","La gorge à l'estomac","Les reins à la vessie","Le foie au cœur"],ok:1,exp:"L'œsophage relie la gorge à l'estomac."},
+{q:"Le gastro-entérologue prend notamment en charge :",opts:["Les fractures","Les maladies de l'appareil digestif","Les maladies des yeux","Les maladies de peau"],ok:1,exp:"Gastro- = appareil digestif."},
+{q:"Une migraine est principalement :",opts:["Une maladie rénale","Une forme particulière de céphalée","Une fracture crânienne","Une infection digestive"],ok:1,exp:"Une céphalée est un mal de tête ; toutes ne sont pas des migraines."},
+{q:"Le mot bénin, pour une lésion ou tumeur, signifie généralement :",opts:["Obligatoirement infectieux","Non cancéreux dans le contexte tumoral","Toujours sans aucun symptôme","Contagieux"],ok:1,exp:"Bénin s'oppose à malin (cancéreux) dans ce contexte."},
+{q:"Un patient demande quel médicament prendre pour sa migraine.",opts:["Conseiller celui qu'il utilise personnellement","Conseiller le médicament le moins cher","Rechercher un traitement sur Internet","Ne pas prescrire ni choisir un traitement, orienter vers un professionnel habilité"],ok:3,exp:"Prescrire ne relève pas du SAMA."},
+{q:"La colonne vertébrale est constituée principalement :",opts:["De côtes","De vertèbres","De métacarpes","De rotules"],ok:1,exp:"La colonne vertébrale est faite de vertèbres."},
+{q:"Le terme œdème désigne :",opts:["Une fracture","Un gonflement lié à une accumulation de liquide dans les tissus","Une diminution de la température","Une infection osseuse"],ok:1,exp:"L'œdème est un gonflement par accumulation de liquide."},
+{q:"Quel spécialiste est principalement consacré aux maladies de l'œil ?",opts:["ORL","Neurologue","Ophtalmologiste","Rhumatologue"],ok:2,exp:"L'ophtalmologie concerne les yeux."},
+{q:"L'abréviation ECG désigne :",opts:["Une échographie cérébrale générale","Un électrocardiogramme","Un examen cutané général","Une endoscopie colique générale"],ok:1,exp:"ECG = électrocardiogramme."},
+{q:"Deux collègues discutent du diagnostic d'un patient dans l'ascenseur, en présence de visiteurs. Cette situation est :",opts:["Acceptable si le nom complet n'est pas prononcé","Acceptable entre collègues dans tout lieu","Inappropriée car la confidentialité doit être préservée","Acceptable si la discussion dure moins d'une minute"],ok:2,exp:"La confidentialité doit être préservée quel que soit le lieu."},
+{q:"Le reflux gastro-œsophagien correspond notamment :",opts:["Au passage d'urine vers les reins","À la remontée du contenu de l'estomac vers l'œsophage","À une infection pulmonaire","À une maladie des articulations"],ok:1,exp:"Le RGO est une remontée du contenu gastrique."},
+{q:"Quel organe appartient à l'appareil digestif ?",opts:["Vessie","Poumon","Estomac","Trachée"],ok:2,exp:"L'estomac appartient à l'appareil digestif."},
+{q:"Un patient arrive pour la première fois. Parmi ces actions, lesquelles relèvent du SAMA ? (plusieurs réponses)",opts:["Vérifier les informations d'identification","Constituer ou compléter son dossier administratif","Établir son diagnostic médical","L'orienter selon l'organisation de la structure"],ok:[0,1,3],exp:"Le SAMA participe à l'administratif et l'orientation, jamais au diagnostic."},
+{q:"Une patiente appelle après un compte rendu qu'elle ne comprend pas. Le SAMA peut : (plusieurs réponses)",opts:["Vérifier que le bon document a été transmis à la bonne personne","Interpréter le diagnostic à la place du médecin","Expliquer les éléments administratifs relevant de sa compétence","Orienter la patiente vers le professionnel approprié"],ok:[0,2,3],exp:"Tout sauf interpréter le diagnostic médical."},
+{q:"M. Dupont, 68 ans, suivi pour hypertension, ressent une douleur thoracique importante et demande : « Vous pensez que c'est mon cœur ? »",opts:["Confirmer qu'il s'agit probablement d'un infarctus","Proposer le prochain rendez-vous disponible","Lui demander de prendre sa tension puis rappeler","Ne pas établir de diagnostic et appliquer la procédure prévue pour une situation potentiellement urgente"],ok:3,exp:"Reconnaître une situation nécessitant une orientation appropriée, sans diagnostiquer."},
+],
+[ // 101-150
+{q:"Mme Leroy téléphone pour modifier son adresse. Une autre Mme Leroy, née la même année, est également enregistrée.",opts:["Modifier le premier dossier trouvé","Demander uniquement le code postal","Vérifier suffisamment de traits d'identité avant toute modification","Modifier les deux dossiers"],ok:2,exp:"L'identitovigilance s'applique aussi aux opérations administratives ordinaires."},
+{q:"Un patient est adressé pour une coloscopie. Cet examen concerne :",opts:["Les poumons","La vessie","Le côlon","Le cœur"],ok:2,exp:"-scopie = exploration visuelle ; coloscopie = exploration du côlon."},
+{q:"Un patient souffrant de douleurs et maladies articulaires peut être adressé à un :",opts:["Pneumologue","Rhumatologue","Ophtalmologiste","Cardiologue"],ok:1,exp:"Les articulations relèvent de la rhumatologie."},
+{q:"La thyroïde se situe principalement :",opts:["Dans le bassin","Derrière le genou","Au niveau du cou","Dans le crâne"],ok:2,exp:"La thyroïde est située au niveau du cou."},
+{q:"Un patient montre une ordonnance et demande : « Ce médicament est pour quoi ? »",opts:["Expliquer systématiquement son indication","Modifier la posologie si elle paraît inhabituelle","Conseiller un médicament équivalent","Éviter toute interprétation dépassant son champ et orienter"],ok:3,exp:"L'interprétation médicale ne relève pas du SAMA."},
+{q:"Une anémie correspond notamment à :",opts:["Une élévation systématique de la glycémie","Une diminution anormale de l'hémoglobine dans le sang","Une infection des reins","Une augmentation de la pression artérielle"],ok:1,exp:"L'anémie est une baisse de l'hémoglobine."},
+{q:"Un laboratoire appelle pour transmettre un résultat concernant un patient. Le SAMA doit :",opts:["Le noter sur un papier laissé à l'accueil","Le transmettre à n'importe quel collègue","Suivre le circuit sécurisé prévu par la structure","L'envoyer sur sa messagerie personnelle"],ok:2,exp:"Le circuit sécurisé prévu doit toujours être respecté."},
+{q:"Le radius et l'ulna sont situés :",opts:["Dans la jambe","Dans l'avant-bras","Dans le thorax","Dans le bassin"],ok:1,exp:"Radius et ulna sont les os de l'avant-bras."},
+{q:"Une cystite est généralement :",opts:["Une inflammation du cœur","Une infection ou inflammation de la vessie","Une fracture","Une maladie pulmonaire"],ok:1,exp:"La cystite touche la vessie."},
+{q:"Une patiente doit consulter pour sa thyroïde. Quelle spécialité est fréquemment concernée ?",opts:["Dermatologie","Pneumologie","Endocrinologie","Ophtalmologie"],ok:2,exp:"La thyroïde relève de l'endocrinologie."},
+{q:"Le terme asymptomatique signifie :",opts:["Présentant de nombreux symptômes","Ne présentant pas de symptôme apparent","Ne nécessitant jamais de surveillance","Non contagieux"],ok:1,exp:"Asymptomatique = sans symptôme apparent."},
+{q:"Une patiente demande : « Mon médecin a écrit “nodule thyroïdien”, est-ce un cancer ? »",opts:["Oui","Non","Probablement","Le SAMA ne peut pas déduire la nature du nodule et oriente vers le professionnel compétent"],ok:3,exp:"Connaître un terme ne permet pas d'en interpréter la portée clinique."},
+{q:"La vésicule biliaire est située à proximité :",opts:["Du cerveau","Du foie","De la vessie","Du cœur"],ok:1,exp:"La vésicule biliaire est proche du foie."},
+{q:"L'ostéoporose entraîne principalement :",opts:["Une augmentation de la masse musculaire","Une fragilisation des os","Une inflammation pulmonaire","Une augmentation de la glycémie"],ok:1,exp:"L'ostéoporose fragilise les os."},
+{q:"L'abréviation ORL correspond à :",opts:["Orthopédie-Radiologie-Laboratoire","Oto-rhino-laryngologie","Organisation respiratoire locale","Observation rénale longitudinale"],ok:1,exp:"ORL = oreilles, nez, gorge."},
+{q:"Un patient âgé demande plusieurs fois la même information sur son rendez-vous. Le SAMA doit :",opts:["Manifester son agacement","Répondre uniquement à son accompagnant","Reformuler calmement et utiliser si nécessaire un support adapté","Annuler le rendez-vous"],ok:2,exp:"Reformuler avec patience reste la bonne pratique."},
+{q:"Un patient souhaite faire rectifier une donnée qu'il estime incorrecte dans son dossier.",opts:["Le SAMA doit toujours refuser","Il doit effacer immédiatement toute donnée contestée","Il doit expliquer ou appliquer la procédure prévue pour ce type de demande","Il doit créer un deuxième dossier"],ok:2,exp:"Une procédure encadre la rectification des données."},
+{q:"Le côlon appartient :",opts:["À l'appareil respiratoire","À l'appareil digestif","À l'appareil urinaire","Au système nerveux"],ok:1,exp:"Le côlon fait partie de l'appareil digestif."},
+{q:"Le terme métastase désigne :",opts:["Une infection bactérienne","Une fracture multiple","La propagation de cellules cancéreuses vers un autre site de l'organisme","Une inflammation articulaire"],ok:2,exp:"Le SAMA doit reconnaître ce terme sans en expliquer le pronostic."},
+{q:"Une patiente demande : « Mon compte rendu parle de métastases, combien de temps me reste-t-il ? »",opts:["Donner une estimation prudente","Rechercher des statistiques sur Internet","Demander l'avis d'un collègue administratif","Accueillir la demande avec tact et orienter rapidement vers le professionnel compétent"],ok:3,exp:"Une question de pronostic relève exclusivement du professionnel médical."},
+{q:"Un médecin annonce une absence imprévue pour l'après-midi. Plusieurs patients sont programmés.",opts:["Attendre leur arrivée","Supprimer les rendez-vous sans prévenir","Appliquer la procédure du service, contacter les patients et chercher des solutions","Demander aux patients de trouver un autre médecin"],ok:2,exp:"Une gestion proactive et organisée est attendue."},
+{q:"Une personne se présentant comme employeur d'un patient demande une confirmation de son rendez-vous médical.",opts:["Confirmer l'heure uniquement","Confirmer la date sans préciser le médecin","Ne pas communiquer l'information sans cadre autorisant cette transmission","Répondre si l'employeur connaît l'adresse du patient"],ok:2,exp:"Aucune transmission sans cadre autorisant, quel que soit le lien allégué."},
+{q:"Les côtes participent principalement à la protection :",opts:["De la vessie","Du genou","Des organes du thorax, notamment cœur et poumons","Du cerveau"],ok:2,exp:"Les côtes protègent le contenu du thorax."},
+{q:"La gastro-entérite provoque fréquemment :",opts:["Uniquement une douleur articulaire","Diarrhées, vomissements et/ou douleurs digestives","Une fracture","Une baisse de l'audition"],ok:1,exp:"La gastro-entérite touche le système digestif."},
+{q:"Une rémission désigne généralement :",opts:["L'aggravation systématique d'une maladie","Une diminution ou disparition des signes d'une maladie pendant une période donnée","Une erreur de diagnostic","Une intervention chirurgicale"],ok:1,exp:"La rémission est une amélioration temporaire ou durable des signes."},
+{q:"Quel spécialiste prend notamment en charge certaines maladies hormonales et le diabète ?",opts:["Dermatologue","Endocrinologue","ORL","Orthopédiste"],ok:1,exp:"L'endocrinologie couvre les hormones et le diabète."},
+{q:"Une personne parle très rapidement et fournit de nombreuses informations. Le SAMA doit notamment :",opts:["Interrompre définitivement l'appel","Reformuler les éléments importants et vérifier leur exactitude","Mémoriser sans vérifier","Transmettre l'appel à n'importe quel service"],ok:1,exp:"Reformuler et vérifier limite les erreurs de transmission."},
+{q:"La trachée appartient principalement :",opts:["À l'appareil urinaire","Au système digestif","Aux voies respiratoires","Au système osseux"],ok:2,exp:"La trachée fait partie des voies respiratoires."},
+{q:"Une tachycardie correspond à :",opts:["Une respiration lente","Une pression artérielle basse","Une fréquence cardiaque anormalement rapide","Une glycémie basse"],ok:2,exp:"Tachy- = rapide, cardie = cœur."},
+{q:"Un patient demande : « Mon cœur bat à 110, est-ce dangereux ? »",opts:["Répondre que ce n'est jamais dangereux","Poser un diagnostic de tachycardie pathologique","Ne pas interpréter isolément la donnée et appliquer l'orientation prévue","Conseiller de doubler son traitement"],ok:2,exp:"Une valeur isolée ne doit pas être interprétée par le SAMA."},
+{q:"Un patient signale une erreur dans son identité. Avant modification, le SAMA doit notamment : (plusieurs réponses)",opts:["Vérifier l'identité du patient","Rechercher l'origine de l'anomalie selon les procédures disponibles","Supprimer immédiatement l'ancien dossier","Appliquer la procédure d'identitovigilance"],ok:[0,1,3],exp:"Toute correction d'identité suit une procédure rigoureuse, jamais une suppression immédiate."},
+{q:"Le bassin relie principalement :",opts:["Le crâne au thorax","Le bras à l'avant-bras","Le tronc aux membres inférieurs","Les côtes au sternum uniquement"],ok:2,exp:"Le bassin relie le tronc aux membres inférieurs."},
+{q:"L'insuffisance cardiaque correspond, de façon simplifiée, à :",opts:["L'arrêt systématique du cœur","L'incapacité du cœur à assurer efficacement son rôle de pompe","Une infection pulmonaire","Une maladie exclusivement osseuse"],ok:1,exp:"Le cœur ne pompe plus assez efficacement."},
+{q:"Lors de la transcription, le SAMA hésite entre « insuffisance cardiaque » et « insuffisance rénale » entendus.",opts:["Choisir le terme le plus fréquent","Écrire les deux","Vérifier l'information plutôt que d'introduire une donnée potentiellement fausse","Supprimer le diagnostic"],ok:2,exp:"En cas de doute, vérifier plutôt que de deviner."},
+{q:"L'urologue prend notamment en charge :",opts:["Uniquement les maladies du cerveau","Des affections de l'appareil urinaire et de l'appareil génital masculin","Uniquement les maladies de peau","Les maladies des yeux"],ok:1,exp:"L'urologie couvre l'appareil urinaire et génital masculin."},
+{q:"Un SAMA imprime par erreur un document concernant le mauvais patient.",opts:["Le jeter dans une poubelle ordinaire","L'emporter chez lui pour le détruire","Appliquer immédiatement la procédure de confidentialité et de destruction sécurisée","Le conserver sur son bureau"],ok:2,exp:"Un document erroné suit une procédure de destruction sécurisée."},
+{q:"Le cerveau est protégé principalement par :",opts:["Le sternum","Le bassin","Le crâne","La clavicule"],ok:2,exp:"Le crâne protège le cerveau."},
+{q:"Une lombalgie est :",opts:["Une douleur pulmonaire","Une douleur de l'épaule","Une douleur située dans le bas du dos","Une maladie du foie"],ok:2,exp:"Lombalgie = douleur lombaire, bas du dos."},
+{q:"Le préfixe brady- évoque :",opts:["Une accélération","Un ralentissement","Une inflammation","Une ablation"],ok:1,exp:"Bradycardie = fréquence cardiaque anormalement lente."},
+{q:"Un patient appelle pour déplacer son rendez-vous. Le SAMA doit : (plusieurs réponses)",opts:["Vérifier qu'il s'adresse au bon dossier/patient","Rechercher les possibilités compatibles avec l'organisation du service","Demander son diagnostic complet sans nécessité","Confirmer clairement le nouveau rendez-vous"],ok:[0,1,3],exp:"Toutes les étapes sauf demander un diagnostic non nécessaire."},
+{q:"Une patiente en gynécologie demande que son accompagnant ne soit informé ni du motif ni du contenu de sa consultation.",opts:["Le SAMA doit informer l'accompagnant puisqu'il est présent","Le SAMA doit respecter la confidentialité de la patiente dans le cadre applicable","Seules les consultations psychiatriques sont confidentielles","La confidentialité ne concerne que les diagnostics graves"],ok:1,exp:"La confidentialité s'applique quelle que soit la spécialité."},
+{q:"Quel trajet simplifié est correct pour les aliments ?",opts:["Bouche → trachée → poumons","Bouche → œsophage → estomac → intestins","Bouche → reins → vessie","Bouche → cœur → foie"],ok:1,exp:"C'est le trajet digestif correct."},
+{q:"Une allergie correspond de façon simplifiée :",opts:["Toujours à une infection","À une réaction inappropriée du système immunitaire à une substance habituellement tolérée","À une fracture","Uniquement à une maladie cutanée"],ok:1,exp:"L'allergie est une réaction immunitaire excessive."},
+{q:"Une allergie connue figure dans le dossier d'un patient. Le SAMA :",opts:["Peut décider qu'elle n'est plus pertinente","Peut la supprimer si elle est ancienne","Ne doit pas modifier une information médicale de sa propre initiative","Doit la remplacer par le nom d'un médicament"],ok:2,exp:"Le SAMA ne modifie jamais une donnée médicale de son propre chef."},
+{q:"Une échographie utilise principalement :",opts:["Des rayons X","Un champ magnétique puissant","Des ultrasons","Une injection systématique de produit radioactif"],ok:2,exp:"L'échographie utilise les ultrasons."},
+{q:"Un patient arrive 45 minutes en retard et exige néanmoins d'être reçu immédiatement.",opts:["Lui garantir la consultation","Lui annoncer qu'il est définitivement exclu","Vérifier les possibilités avec l'organisation du service et expliquer calmement la solution","Modifier l'ordre des patients sans prévenir personne"],ok:2,exp:"Il faut vérifier les possibilités réelles avant de répondre."},
+{q:"Une patiente suivie pour BPCO appelle le secrétariat de pneumologie pour connaître l'heure de son rendez-vous.",opts:["Évaluer sa fonction respiratoire","Lui demander pourquoi elle a une BPCO","Vérifier son identité et lui communiquer l'information selon la procédure","Lui expliquer son traitement"],ok:2,exp:"Mentionner une pathologie ne transforme pas une demande administrative en consultation médicale."},
+{q:"Une ordonnance indique « consultation néphrologie ». Cela concerne principalement :",opts:["Les poumons","Le cerveau","Les reins","Les articulations"],ok:2,exp:"Néphro- = rein."},
+{q:"Mme R., 74 ans, explique difficilement sa demande et semble ne pas comprendre la date de son rendez-vous. Le SAMA peut : (plusieurs réponses)",opts:["Parler clairement et calmement","Reformuler la date et les informations essentielles","Considérer automatiquement qu'elle présente des troubles cognitifs","Proposer, si les procédures le permettent, un support facilitant la mémorisation"],ok:[0,1,3],exp:"Adapter la communication ne signifie pas établir un diagnostic sur ses capacités cognitives."},
+{q:"M. Benali a reçu une convocation pour une coloscopie qu'il ne comprend pas, et demande : « Ils recherchent sûrement un cancer, non ? »",opts:["« Oui, c'est généralement pour rechercher un cancer. »","« Non, une coloscopie n'a rien à voir avec le cancer. »","« Je ne peux rien vous dire, même sur la nature de l'examen. »","« La coloscopie observe l'intérieur du côlon ; je ne peux pas déterminer la raison médicale précise ni interpréter ce que recherche votre médecin, mais je peux vous orienter. »"],ok:3,exp:"Expliquer le terme sans interpréter la situation médicale individuelle."},
+],
+[ // 151-200
+{q:"Un homme demande que le rendez-vous de son épouse soit avancé car son état « s'aggrave ».",opts:["Modifier immédiatement le rendez-vous","Demander le diagnostic complet","Recueillir les informations, vérifier l'identification et appliquer la procédure d'orientation adaptée","Lui conseiller de modifier son traitement"],ok:2,exp:"Le SAMA combine identification, écoute et orientation."},
+{q:"Une secrétaire envoie un compte rendu par courriel : elle vérifie le nom du patient mais pas l'adresse électronique du destinataire. Quelle précaution manque ?",opts:["Vérifier l'orthographe du diagnostic uniquement","Vérifier que le destinataire est bien celui auquel le document doit être adressé","Téléphoner systématiquement au patient","Imprimer également le document"],ok:1,exp:"Vérifier le destinataire est essentiel avant tout envoi de données de santé."},
+{q:"Un compte rendu mentionne « dyspnée à l'effort ». Le SAMA doit comprendre :",opts:["Douleur apparaissant pendant la marche","Difficulté à avaler après un effort","Difficulté respiratoire apparaissant ou augmentant lors d'un effort","Accélération cardiaque permanente"],ok:2,exp:"Dyspnée = difficulté respiratoire."},
+{q:"Une ordonnance indique « consultation neurologique pour céphalées récurrentes ». Associations correctes ? (plusieurs réponses)",opts:["Neurologie → système nerveux","Céphalée → mal de tête","Céphalée → douleur abdominale","Neurologie → appareil urinaire"],ok:[0,1],exp:"Seules les deux premières associations sont exactes."},
+{q:"Une patiente affirme que la photographie dans son dossier n'est pas la sienne. Première priorité ?",opts:["Supprimer immédiatement toute la fiche","Remplacer la photo sans autre contrôle","Vérifier l'identité et traiter l'anomalie selon la procédure d'identitovigilance","Considérer la photographie comme facultative"],ok:2,exp:"Toute anomalie d'identité suit la procédure d'identitovigilance."},
+{q:"Une patiente doit passer une échographie abdominale. Quels organes sont situés dans l'abdomen ? (plusieurs réponses)",opts:["Foie","Estomac","Reins","Cerveau"],ok:[0,1,2],exp:"Le cerveau n'est pas un organe abdominal."},
+{q:"Un médecin demande au SAMA d'envoyer rapidement un document contenant des données de santé.",opts:["Peut utiliser n'importe quel moyen puisqu'un médecin l'a demandé","Peut utiliser sa messagerie personnelle en cas d'urgence","Doit utiliser les moyens et procédures sécurisés prévus par la structure","Doit systématiquement refuser"],ok:2,exp:"Même en urgence, les procédures sécurisées restent la règle."},
+{q:"Quelle association est incorrecte ?",opts:["Tachycardie → cœur rapide","Dyspnée → difficulté respiratoire","Hématurie → sang dans les urines","Hypoglycémie → excès de glucose sanguin"],ok:3,exp:"Hypo- indique une diminution ; l'excès de glucose est une hyperglycémie."},
+{q:"Un patient appelle pour annuler son rendez-vous du lendemain. Conduite la plus complète ?",opts:["Supprimer simplement le rendez-vous","Noter l'annulation sur un papier","Identifier correctement le patient, enregistrer l'annulation et appliquer les règles de reprogrammation","Conserver le rendez-vous pour éviter une erreur"],ok:2,exp:"Une annulation suit un processus complet, pas juste une suppression."},
+{q:"Un patient demande : « Ma tension est 165/95, est-ce grave ? »",opts:["Diagnostiquer une hypertension sévère","Lui conseiller de doubler son traitement","Lui dire que cette valeur est sans importance","Ne pas établir seul de conclusion clinique et appliquer les modalités d'orientation"],ok:3,exp:"Une valeur isolée ne doit pas être interprétée cliniquement par le SAMA."},
+{q:"Un policier demande si une personne est actuellement hospitalisée.",opts:["Toujours répondre","Toujours refuser quelle que soit la situation","Appliquer le cadre légal et la procédure de l'établissement","Répondre si le policier connaît la date de naissance"],ok:2,exp:"Le SAMA ne décide pas seul de la légitimité d'une demande institutionnelle."},
+{q:"Un compte rendu mentionne une « fracture distale du radius ». Le radius appartient :",opts:["Au pied","Au thorax","À l'avant-bras","Au bassin"],ok:2,exp:"Le radius est un os de l'avant-bras."},
+{q:"Un patient malvoyant se présente au secrétariat. Attitudes appropriées ? (plusieurs réponses)",opts:["S'adresser directement au patient","Adapter la communication et les supports lorsque possible","S'adresser exclusivement à son accompagnant","Vérifier que les informations essentielles sont comprises"],ok:[0,1,3],exp:"S'adresser exclusivement à l'accompagnant n'est pas approprié."},
+{q:"Un compte rendu indique « antécédent d'AVC ». Le mot antécédent signifie ici :",opts:["Maladie actuelle obligatoire","Événement ou problème de santé survenu auparavant","Traitement futur","Diagnostic erroné"],ok:1,exp:"Un antécédent est un événement de santé passé."},
+{q:"Un médecin dicte « néphrologie », mais le SAMA écrit « neurologie ». Pourquoi l'erreur est-elle importante ?",opts:["Les deux mots sont synonymes","Il s'agit uniquement d'une faute typographique","Les deux termes correspondent à des domaines médicaux différents","Les deux concernent les reins"],ok:2,exp:"Néphrologie = reins ; neurologie = système nerveux."},
+{q:"Un patient parle peu français et son enfant de 10 ans propose de traduire des informations médicales sensibles.",opts:["Utiliser systématiquement l'enfant comme interprète","Refuser toute communication","Rechercher les moyens d'interprétariat ou d'aide adaptés prévus par la structure","Remettre tous les documents à l'enfant"],ok:2,exp:"Un enfant ne doit pas être utilisé comme interprète pour des informations sensibles."},
+{q:"Parmi ces maladies, lesquelles sont généralement chroniques ? (plusieurs réponses)",opts:["Diabète","BPCO","Hypertension artérielle","Fracture simple récente"],ok:[0,1,2],exp:"Une fracture récente n'est pas une maladie chronique."},
+{q:"Un médecin demande d'insérer un patient supplémentaire dans un planning déjà complet.",opts:["Supprimer un autre patient","Refuser automatiquement","Appliquer les consignes tout en vérifiant les contraintes et en adaptant selon les procédures","Demander au nouveau patient de venir sans horaire"],ok:2,exp:"Concilier consigne médicale et contraintes organisationnelles."},
+{q:"Une patiente demande de lui remettre « tout son dossier médical » sur une clé USB.",opts:["Copier immédiatement l'intégralité du dossier","Refuser définitivement","L'informer de la procédure d'accès au dossier et appliquer les modalités sécurisées","Lui donner ses identifiants informatiques"],ok:2,exp:"L'accès au dossier suit une procédure encadrée, pas une copie impromptue."},
+{q:"Quelle association est correcte ?",opts:["Rein → respiration","Poumon → stockage de l'urine","Estomac → digestion","Cerveau → production de bile"],ok:2,exp:"L'estomac participe à la digestion."},
+{q:"Trois événements surviennent presque simultanément : un rendez-vous, le téléphone, et un malaise à l'accueil. Quelle situation devient prioritaire ?",opts:["Le rendez-vous","Le téléphone","La personne faisant un malaise","L'ordre n'a aucune importance"],ok:2,exp:"Une situation potentiellement urgente prime sur l'organisation administrative."},
+{q:"Le SAMA quitte son poste quelques minutes ; le dossier médical d'un patient est affiché à l'écran.",opts:["Laisser l'écran ouvert s'il revient rapidement","Sécuriser/verrouiller sa session conformément aux règles","Éteindre tout le réseau","Demander à un patient de surveiller l'écran"],ok:1,exp:"Verrouiller la session protège la confidentialité des données."},
+{q:"Associez correctement : Dysphagie →",opts:["Difficulté respiratoire","Difficulté à avaler","Douleur lombaire","Diminution de l'audition"],ok:1,exp:"Dysphagie = difficulté à avaler."},
+{q:"Un patient présente une ordonnance pour une consultation en orthopédie. Cette spécialité concerne notamment :",opts:["Les hormones","La peau","L'appareil locomoteur, notamment os et articulations","Uniquement l'appareil digestif"],ok:2,exp:"L'orthopédie concerne l'appareil locomoteur."},
+{q:"Le SAMA ouvre le dossier d'un homonyme et annonce : « Votre scanner est prévu lundi. » Le patient répond n'avoir jamais eu de scanner prévu.",opts:["Convaincre le patient","Supprimer le scanner","Interrompre la consultation du dossier et vérifier immédiatement l'identité","Prendre un nouveau rendez-vous"],ok:2,exp:"Il faut immédiatement vérifier l'identité en cas de doute manifeste."},
+{q:"Une biopsie et une ablation sont-elles synonymes ?",opts:["Toujours","Non : la biopsie prélève un échantillon pour analyse, l'ablation retire un tissu, une lésion ou un organe","Oui, uniquement en cancérologie","Oui, uniquement en chirurgie"],ok:1,exp:"Ce sont deux gestes différents, à ne pas confondre."},
+{q:"Une patiente pleure après une convocation en oncologie et demande : « Cela veut dire que j'ai un cancer ? »",opts:["Confirmer le diagnostic","Minimiser : « Ce n'est sûrement rien »","Accueillir son inquiétude sans interpréter la convocation et l'orienter vers le professionnel compétent","Lui expliquer les statistiques de survie"],ok:2,exp:"Accueillir l'émotion sans interpréter médicalement la situation."},
+{q:"Un patient demande à recevoir sa convocation sur l'adresse électronique de son employeur, faute d'adresse personnelle.",opts:["L'envoyer immédiatement","Refuser tout envoi électronique à vie","Vérifier les modalités autorisées, le consentement du patient et les règles de sécurité","Envoyer également le compte rendu médical"],ok:2,exp:"Toute transmission électronique doit respecter des modalités précises."},
+{q:"Quel ensemble est entièrement constitué d'organes de l'appareil digestif ?",opts:["Poumons – estomac – vessie","Œsophage – estomac – intestins","Rein – vessie – foie","Cœur – foie – trachée"],ok:1,exp:"Œsophage, estomac et intestins appartiennent tous à l'appareil digestif."},
+{q:"Une patiente a un résultat « lésion suspecte » et une consigne de rendez-vous rapide. Elle demande si c'est forcément un cancer.",opts:["Confirmer que « suspect » signifie cancer","Expliquer qu'elle n'a probablement rien","Organiser le rendez-vous conformément aux indications reçues sans interpréter","Lui demander d'envoyer le résultat sur la messagerie personnelle du secrétaire"],ok:2,exp:"Organiser sans interpréter le résultat médical."},
+{q:"M. Martin, né le 14/03/1964, arrive en consultation. Le dossier affiché concerne un M. Martin né à la même date, mais le prénom et l'adresse diffèrent.",opts:["Considérer qu'il s'agit du même patient","Remplacer le prénom et l'adresse","Poursuivre les vérifications d'identité avant d'accéder ou de modifier le dossier","Demander au patient lequel des deux dossiers il préfère"],ok:2,exp:"Une identité partiellement concordante impose des vérifications supplémentaires."},
+{q:"Le médecin dicte : « Patient présentant une dyspnée, antécédent de BPCO, consultation pneumologique à programmer. » Quelles connaissances permettent de comprendre ? (plusieurs réponses)",opts:["Dyspnée = difficulté respiratoire","BPCO = affection respiratoire chronique","Pneumologie = spécialité de l'appareil respiratoire","BPCO = maladie rénale"],ok:[0,1,2],exp:"BPCO concerne l'appareil respiratoire, pas les reins."},
+{q:"Un homme se dit fils de Mme Durand et demande le résultat de sa biopsie, affirmant qu'elle l'y autorise.",opts:["Transmettre puisque le fils connaît l'examen","Transmettre uniquement si le résultat est normal","Appliquer les règles d'identification, d'autorisation et de transmission prévues","Lire uniquement la conclusion"],ok:2,exp:"Une allégation verbale ne suffit pas à autoriser la transmission."},
+{q:"Le compte rendu de Mme X apparaît dans le dossier de M. Y. Quelles actions sont appropriées ? (plusieurs réponses)",opts:["Ne pas laisser l'erreur sans traitement","Appliquer la procédure de correction/signalement","Modifier discrètement le contenu médical pour l'adapter à M. Y","Préserver la confidentialité des deux patients"],ok:[0,1,3],exp:"Il ne faut jamais modifier soi-même le contenu médical."},
+{q:"Un patient arrive très en retard, le médecin ne peut plus le recevoir. Réponse la plus professionnelle ?",opts:["« Ce n'est pas mon problème. »","L'insérer entre deux patients sans accord","Expliquer la situation avec courtoisie et rechercher les solutions disponibles","Lui garantir un rendez-vous immédiat avec un autre médecin"],ok:2,exp:"Expliquer avec courtoisie et chercher une solution réaliste."},
+{q:"Une patiente est adressée pour des calculs rénaux. Associations correctes ? (plusieurs réponses)",opts:["Rein → appareil urinaire","Néphrologie → maladies rénales","Urologie → peut également intervenir dans certaines affections urinaires","Pneumologie → spécialité principale du rein"],ok:[0,1,2],exp:"La pneumologie ne concerne pas les reins."},
+{q:"Une personne inconnue se présente comme technicien informatique et demande le mot de passe pour « tester le logiciel ».",opts:["Lui donner le mot de passe s'il possède un badge","Se connecter puis partir","Ne pas communiquer ses identifiants et appliquer les procédures de sécurité","Écrire son mot de passe sur un post-it"],ok:2,exp:"Les identifiants personnels ne se communiquent jamais, quel que soit le prétexte."},
+{q:"Une patiente comprend difficilement un courrier de convocation comportant de nombreux termes administratifs.",opts:["Simplement relire le courrier mot pour mot","Reformuler les informations relevant de sa compétence dans un langage accessible et vérifier la compréhension","Expliquer le diagnostic supposé","Demander à un autre patient de lui expliquer"],ok:1,exp:"Reformuler dans un langage clair reste la bonne pratique."},
+{q:"Un patient appelle pour déplacer un rendez-vous ; une alerte interne signale une situation urgente nécessitant une procédure immédiate.",opts:["Terminer obligatoirement toute la reprogrammation","Gérer la priorité conformément aux procédures, en sécurisant/interrompant correctement l'échange en cours","Ignorer l'alerte","Laisser le patient connecté sans explication"],ok:1,exp:"La situation urgente prime, mais l'interruption doit rester correcte pour le patient au téléphone."},
+{q:"Une secrétaire écrit « le patient souffre probablement d'une infection urinaire » alors que le médecin avait dicté « brûlures urinaires ».",opts:["Une simple faute de ponctuation","Elle a ajouté une interprétation diagnostique qui n'avait pas été dictée","Elle aurait dû remplacer « infection » par « cystite »","Aucune erreur"],ok:1,exp:"Transcrire ne permet pas de compléter le raisonnement médical."},
+{q:"Une patiente majeure arrive avec sa mère, qui répond systématiquement à sa place. La patiente demande finalement à parler seule.",opts:["Refuser puisque la mère est déjà présente","Demander à la mère de continuer à répondre","Respecter la demande de la patiente et préserver la confidentialité","Annuler la consultation"],ok:2,exp:"La demande de la patiente majeure doit être respectée."},
+{q:"Une personne se disant médecin appelle et demande immédiatement des informations sur un patient commun.",opts:["Transmettre automatiquement puisqu'elle se dit médecin","Refuser automatiquement toute communication entre professionnels","Vérifier le cadre, l'identité/qualité du demandeur et appliquer les règles de transmission","Donner son propre identifiant pour permettre l'accès"],ok:2,exp:"Une allégation de statut professionnel ne suffit pas sans vérification."},
+{q:"Un courrier mentionne : « Patient diabétique présentant une neuropathie périphérique. » Le SAMA doit comprendre au minimum :",opts:["Qu'il s'agit obligatoirement d'un cancer","Que le diabète concerne la régulation de la glycémie et que « neuropathie » désigne une atteinte des nerfs","Qu'il doit déterminer le stade de la neuropathie","Qu'il doit expliquer le traitement au patient"],ok:1,exp:"Comprendre le vocabulaire, sans interpréter la portée clinique."},
+{q:"Le SAMA prépare un courrier et constate : une date de naissance différente du dossier, une faute dans l'adresse du destinataire, et un terme médical incompris.",opts:["Envoyer puis corriger ultérieurement","Corriger le terme médical selon son intuition","Corriger uniquement l'adresse","Vérifier les anomalies relevant de son champ et faire confirmer l'information médicale incertaine avant transmission"],ok:3,exp:"Toutes les anomalies doivent être traitées avant l'envoi."},
+{q:"Un patient demande pourquoi le secrétariat possède son numéro de téléphone.",opts:["Lui dire qu'un établissement de santé peut collecter toutes les informations qu'il souhaite","Lui fournir les informations appropriées sur l'utilisation de ses données et l'orienter si nécessaire","Supprimer immédiatement tout son dossier","Refuser de répondre"],ok:1,exp:"Le patient a droit à une information claire sur l'utilisation de ses données."},
+{q:"Associez correctement quatre patients à leur spécialité : affection cutanée / maladie rénale / maladie respiratoire / maladie du système nerveux.",opts:["Cardiologie – ORL – rhumatologie – gastro-entérologie","Dermatologie – néphrologie – pneumologie – neurologie","Neurologie – dermatologie – urologie – cardiologie","Pneumologie – neurologie – dermatologie – néphrologie"],ok:1,exp:"C'est l'association exacte dans l'ordre donné."},
+{q:"Un patient mécontent filme le personnel tout en exigeant immédiatement son dossier médical.",opts:["Arracher le téléphone","Lui remettre immédiatement l'intégralité du dossier","Entrer dans une confrontation","Conserver une attitude professionnelle, appliquer les procédures et expliquer les modalités prévues"],ok:3,exp:"Rester professionnel et s'en tenir aux procédures, quelle que soit la provocation."},
+{q:"Simultanément : le téléphone sonne, un patient attend pour une formalité, un médecin demande un document, et une personne en salle d'attente signale que son accompagnant vient de s'effondrer. Priorité ?",opts:["Le téléphone","Le médecin","La formalité administrative","La situation potentiellement urgente en salle d'attente"],ok:3,exp:"Le SAMA doit reconnaître qu'une situation nécessite l'application immédiate des procédures d'urgence."},
+{q:"Pour exercer correctement, un SAMA doit savoir : (plusieurs réponses)",opts:["Utiliser correctement la terminologie médicale courante","Identifier les principaux organes et spécialités médicales","Respecter confidentialité et identitovigilance","Établir lui-même des diagnostics médicaux"],ok:[0,1,2],exp:"Les connaissances médicales du SAMA sont des outils de compréhension, jamais de diagnostic."},
+{q:"Mme Robert, 63 ans, très inquiète, a une lésion pulmonaire à explorer, pense avoir un cancer d'après Internet, et signale être essoufflée depuis ce matin. Une autre Mme Robert du même âge existe dans le dossier.",opts:["Ouvrir le premier dossier Robert, expliquer que la lésion est probablement cancéreuse et donner le prochain rendez-vous","Expliquer qu'une lésion pulmonaire est généralement bénigne et conseiller de surveiller l'essoufflement","Demander d'envoyer le compte rendu sur l'adresse personnelle du secrétaire pour juger de l'urgence","Vérifier soigneusement l'identité, ne pas interpréter la lésion, prendre en compte l'essoufflement signalé, appliquer la procédure d'orientation adaptée, puis organiser la prise en charge selon les consignes"],ok:3,exp:"Cette situation mobilise identitovigilance, terminologie, accueil d'une personne anxieuse, limites professionnelles et reconnaissance d'une situation potentiellement urgente."},
+],
+];
+
+let trancheActive = 0;
+let repondu = [[],[],[],[]];
+let multiSelection = {};
+
+function choisirTranche(i){
+  trancheActive = i;
+  document.querySelectorAll('.tab').forEach((t,idx) => t.classList.toggle('active', idx === i));
+  document.getElementById('score-box').classList.remove('show');
+  afficherQuestions();
+}
+
+function afficherQuestions(){
+  const questions = TRANCHES[trancheActive];
+  const zone = document.getElementById('zone-qcm');
+  repondu[trancheActive] = new Array(questions.length).fill(false);
+  multiSelection = {};
+  zone.innerHTML = questions.map((q, qi) => {
+    const estMulti = Array.isArray(q.ok);
+    return `
+    <div class="qcard" id="q-${trancheActive}-${qi}" data-multi="${estMulti}">
+      <div class="qnum">QUESTION ${qi+1}/${questions.length}${estMulti ? ' · plusieurs réponses' : ''}</div>
+      <div class="profil">${q.q}</div>
+      ${q.opts.map((o, oi) => estMulti
+        ? `<button class="opt multi" onclick="toggleMulti(${qi},${oi},this)">${o}</button>`
+        : `<button class="opt" onclick="repondre(${qi},${oi})">${o}</button>`
+      ).join('')}
+      ${estMulti ? `<button class="valider-multi" onclick="validerMulti(${qi})">Valider ma sélection</button>` : ''}
+      <div class="explic" id="explic-${trancheActive}-${qi}"></div>
+    </div>
+  `}).join('');
+}
+
+function toggleMulti(qi, oi, btn){
+  const key = trancheActive + '-' + qi;
+  if(repondu[trancheActive][qi]) return;
+  if(!multiSelection[key]) multiSelection[key] = [];
+  const idx = multiSelection[key].indexOf(oi);
+  if(idx === -1){ multiSelection[key].push(oi); btn.style.borderColor = 'var(--indigo)'; btn.style.background = 'rgba(99,102,241,.08)'; }
+  else { multiSelection[key].splice(idx,1); btn.style.borderColor=''; btn.style.background=''; }
+}
+
+function validerMulti(qi){
+  const key = trancheActive + '-' + qi;
+  if(repondu[trancheActive][qi]) return;
+  repondu[trancheActive][qi] = true;
+  const q = TRANCHES[trancheActive][qi];
+  const selection = (multiSelection[key] || []).slice().sort();
+  const attendu = q.ok.slice().sort();
+  const correct = JSON.stringify(selection) === JSON.stringify(attendu);
+
+  const card = document.getElementById(`q-${trancheActive}-${qi}`);
+  const boutons = card.querySelectorAll('.opt');
+  boutons.forEach((b,oi) => {
+    b.disabled = true;
+    if(q.ok.includes(oi)) b.classList.add('ok');
+    else if(selection.includes(oi)) b.classList.add('ko');
+  });
+  card.querySelector('.valider-multi').disabled = true;
+  card.querySelector('.valider-multi').style.opacity = '.5';
+
+  const explic = document.getElementById(`explic-${trancheActive}-${qi}`);
+  explic.textContent = (correct ? '✅ ' : '❌ ') + q.exp;
+  explic.classList.add('show');
+  card.dataset.correct = correct ? '1' : '0';
+
+  if(repondu[trancheActive].every(Boolean)) setTimeout(afficherScore, 400);
+}
+
+function repondre(qi, oi){
+  if(repondu[trancheActive][qi]) return;
+  repondu[trancheActive][qi] = true;
+  const q = TRANCHES[trancheActive][qi];
+  const card = document.getElementById(`q-${trancheActive}-${qi}`);
+  const boutons = card.querySelectorAll('.opt');
+  boutons.forEach(b => b.disabled = true);
+  const explic = document.getElementById(`explic-${trancheActive}-${qi}`);
+
+  if(oi === q.ok){
+    boutons[oi].classList.add('ok');
+    explic.textContent = '✅ ' + q.exp;
+  } else {
+    boutons[oi].classList.add('ko');
+    boutons[q.ok].classList.add('ok');
+    explic.textContent = '❌ ' + q.exp;
+  }
+  explic.classList.add('show');
+
+  if(repondu[trancheActive].every(Boolean)){
+    setTimeout(afficherScore, 400);
+  }
+}
+
+function afficherScore(){
+  const questions = TRANCHES[trancheActive];
+  let score = 0;
+  questions.forEach((q, qi) => {
+    const card = document.getElementById(`q-${trancheActive}-${qi}`);
+    if(card.dataset.multi === 'true'){
+      if(card.dataset.correct === '1') score++;
+    } else {
+      if(!card.querySelector('.opt.ko')) score++;
+    }
+  });
+  document.getElementById('score-num').textContent = score + '/' + questions.length;
+  document.getElementById('score-msg').textContent =
+    score === questions.length ? '🎉 Parfait sur cette tranche !' :
+    score >= questions.length - 3 ? '👍 Très solide.' :
+    'Quelques relectures ne feraient pas de mal.';
+  document.getElementById('score-box').classList.add('show');
+}
+
+function recommencer(){
+  afficherQuestions();
+  document.getElementById('score-box').classList.remove('show');
+}
+
+afficherQuestions();
+</script>
+</body>
+</html>
