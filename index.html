@@ -179,6 +179,14 @@ if ('serviceWorker' in navigator) {
       </div>
       <div class="field-arrow">→</div>
     </a>
+    <a class="field-card" href="#" onclick="ouvrirBinome();return false;" style="border-color:rgba(99,102,241,.4);background:rgba(99,102,241,.04)">
+      <div class="field-icon" style="background:rgba(99,102,241,.15)">🤝</div>
+      <div class="field-body">
+        <div class="field-title">Mon binôme</div>
+        <div class="field-desc">Se lier à un(e) autre étudiant(e) pour progresser à deux</div>
+      </div>
+      <div class="field-arrow">→</div>
+    </a>
   </div>
 
   <div class="note-box">
@@ -187,5 +195,74 @@ if ('serviceWorker' in navigator) {
 
   <footer>MEDEXPERT · PRAXIS · RNCP 40800</footer>
 </div>
+
+<!-- MODALE BINÔME -->
+<div id="binome-overlay" style="display:none;position:fixed;inset:0;background:rgba(33,31,56,.5);z-index:300;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#ffffff;border:1.5px solid #6366f1;border-radius:16px;padding:26px 22px;max-width:340px;width:100%;text-align:center;box-shadow:0 8px 30px rgba(67,56,202,.15)">
+    <h2 style="color:#4338ca;font-size:19px;margin-bottom:8px;font-weight:700">Mon binôme</h2>
+    <p style="color:#726f96;font-size:12.5px;margin-bottom:16px;line-height:1.6">Entrez le code d'un(e) autre étudiant(e) abonné(e) à PraxisSAMA pour vous lier.</p>
+    <div id="binome-actuel" style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25);border-radius:8px;padding:10px;margin-bottom:14px;font-size:13px;color:#4338ca;display:none"></div>
+    <input id="binome-input" placeholder="SAMA-CCP1-001" style="width:100%;padding:11px;background:#f4f3fe;border:1.5px solid #e4e2f7;border-radius:8px;color:#211f38;font-size:14px;text-align:center;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:10px">
+    <button onclick="lierBinome()" style="width:100%;padding:11px;background:#4338ca;color:#fff;border:none;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;margin-bottom:8px;font-family:'Poppins',sans-serif">Lier ce binôme</button>
+    <div id="binome-msg" style="font-size:12px;margin-bottom:10px;min-height:16px"></div>
+    <button onclick="fermerBinome()" style="background:none;border:1.5px solid #e4e2f7;color:#726f96;padding:9px 20px;border-radius:8px;cursor:pointer;font-size:12.5px;font-family:'Poppins',sans-serif">Fermer</button>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL_BINOME = "https://fvrfiikrasezlzpaxpqz.supabase.co";
+const SUPABASE_KEY_BINOME = "sb_publishable_TNksbociGaWCY53M4wCAXg_faOxEqKt";
+
+function ouvrirBinome(){
+  document.getElementById('binome-overlay').style.display = 'flex';
+  const lie = localStorage.getItem('praxisama_binome');
+  const actuel = document.getElementById('binome-actuel');
+  if(lie){
+    actuel.style.display = 'block';
+    actuel.textContent = 'Binôme actuel : ' + lie;
+  } else {
+    actuel.style.display = 'none';
+  }
+}
+
+function fermerBinome(){
+  document.getElementById('binome-overlay').style.display = 'none';
+  document.getElementById('binome-msg').textContent = '';
+}
+
+function lierBinome(){
+  const monCode = sessionStorage.getItem('praxisama_code');
+  const cb = document.getElementById('binome-input').value.trim().toUpperCase();
+  const msg = document.getElementById('binome-msg');
+
+  if(!cb){ msg.style.color = '#e8604a'; msg.textContent = 'Entrez un code binôme.'; return; }
+  if(cb === monCode){ msg.style.color = '#e8604a'; msg.textContent = 'Vous ne pouvez pas vous lier à vous-même !'; return; }
+
+  msg.style.color = '#726f96'; msg.textContent = 'Vérification...';
+
+  fetch(SUPABASE_URL_BINOME + '/functions/v1/verifier-acces', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY_BINOME, 'Authorization': 'Bearer ' + SUPABASE_KEY_BINOME },
+    body: JSON.stringify({ code: cb, app: 'PraxisSAMA' }),
+  })
+  .then(r => r.json())
+  .then(data => {
+    if(!data.valide){
+      msg.style.color = '#e8604a';
+      msg.textContent = "Ce code n'est pas un abonné actif de PraxisSAMA.";
+      return;
+    }
+    localStorage.setItem('praxisama_binome', cb);
+    msg.style.color = '#4338ca';
+    msg.textContent = 'Binôme ' + cb + ' lié avec succès !';
+    document.getElementById('binome-actuel').style.display = 'block';
+    document.getElementById('binome-actuel').textContent = 'Binôme actuel : ' + cb;
+  })
+  .catch(() => {
+    msg.style.color = '#e8604a';
+    msg.textContent = 'Erreur de connexion, réessayez.';
+  });
+}
+</script>
 </body>
 </html>
