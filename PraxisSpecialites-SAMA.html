@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PraxisSAMA · Spécialités : qui fait quoi ?</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbfaff; --bg2:#f4f3fe; --panel:#ffffff; --bdr:#e4e2f7;
+  --txt:#211f38; --txt2:#726f96; --indigo:#6366f1; --indigo-dk:#4338ca;
+  --gold:#f5a623; --red:#e8604a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Poppins',system-ui,sans-serif;
+  background:linear-gradient(160deg,var(--bg) 0%,var(--bg2) 100%);
+  color:var(--txt);min-height:100vh;padding-bottom:60px;
+}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+
+.topbar{display:flex;align-items:center;gap:10px;padding:20px 0 6px}
+.back-link{display:flex;align-items:center;gap:6px;color:var(--txt2);text-decoration:none;font-size:13px}
+.back-link svg{width:20px;height:20px}
+
+header{padding:16px 0 20px}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;letter-spacing:1px;color:var(--indigo-dk);background:rgba(99,102,241,.1);
+  border:1px solid rgba(99,102,241,.3);padding:5px 12px;border-radius:20px;margin-bottom:12px;
+}
+h1{font-weight:700;font-size:clamp(24px,5.5vw,32px);letter-spacing:-.3px}
+.tagline{color:var(--txt2);font-size:14px;margin-top:8px;max-width:480px;line-height:1.6}
+
+.section-label{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;
+  color:var(--txt2);margin:32px 0 12px;
+}
+
+.search-wrap{margin-top:8px}
+#recherche{
+  width:100%;padding:13px 16px;border-radius:12px;border:1.5px solid var(--bdr);
+  background:var(--panel);color:var(--txt);font-size:15px;font-family:'Poppins',sans-serif;
+  box-shadow:0 2px 10px rgba(67,56,202,.06);
+}
+#recherche:focus{outline:none;border-color:var(--indigo)}
+
+.spe-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-top:14px}
+.spe{
+  background:var(--panel);border:1px solid var(--bdr);border-radius:12px;
+  padding:12px 16px;box-shadow:0 1px 6px rgba(67,56,202,.04);
+  display:flex;align-items:center;gap:12px;
+}
+.spe.hidden{display:none}
+.spe .nom{font-weight:600;font-size:14.5px;color:var(--indigo-dk);min-width:150px}
+.spe .domaine{font-size:13px;color:var(--txt)}
+
+.qcard{background:var(--panel);border:1.5px solid var(--bdr);border-radius:14px;padding:18px;margin-top:14px;box-shadow:0 2px 10px rgba(67,56,202,.05)}
+.qcard .qnum{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:1px;color:var(--indigo-dk);margin-bottom:8px}
+.qcard .profil{font-size:14.5px;margin-bottom:12px;line-height:1.55;font-weight:500}
+.qcard .opt{display:block;width:100%;text-align:left;background:var(--bg2);border:1.5px solid var(--bdr);border-radius:10px;color:var(--txt);padding:11px 14px;margin-bottom:8px;font-size:13.5px;font-family:'Poppins',sans-serif;cursor:pointer;transition:border-color .15s}
+.qcard .opt:hover{border-color:var(--indigo)}
+.qcard .opt.ok{border-color:var(--indigo-dk);background:rgba(99,102,241,.12);color:var(--indigo-dk);font-weight:600}
+.qcard .opt.ko{border-color:var(--red);background:rgba(232,96,74,.08);color:var(--red)}
+.qcard .opt:disabled{cursor:default}
+.qcard .explic{display:none;margin-top:10px;padding:12px 14px;border-radius:10px;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25);font-size:13px;line-height:1.6}
+.qcard .explic.show{display:block}
+
+.score-box{
+  text-align:center;padding:24px;background:var(--panel);border:1.5px solid var(--bdr);
+  border-radius:16px;margin-top:20px;display:none;box-shadow:0 2px 10px rgba(67,56,202,.05);
+}
+.score-box.show{display:block}
+.score-num{font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:700;color:var(--indigo-dk)}
+.score-msg{font-size:13.5px;color:var(--txt2);margin-top:6px}
+.btn-recommencer{
+  margin-top:14px;padding:10px 20px;border-radius:10px;border:1.5px solid var(--indigo);
+  background:transparent;color:var(--indigo-dk);font-weight:600;font-size:13px;cursor:pointer;font-family:'Poppins',sans-serif;
+}
+
+.rappel{
+  background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.25);border-radius:12px;
+  padding:14px 16px;margin:28px 0 6px;font-size:12.5px;color:var(--txt);line-height:1.6;text-align:center;
+}
+.rappel strong{color:#b8760f}
+
+footer{text-align:center;padding:30px 20px 10px;color:var(--txt2);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <a class="back-link" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      PraxisSAMA
+    </a>
+  </div>
+
+  <header>
+    <div class="badge">SPÉCIALITÉS</div>
+    <h1>Qui fait quoi ?</h1>
+    <p class="tagline">Le référentiel des 20 spécialités, puis un entraînement à l'orientation — le vrai geste du quotidien.</p>
+  </header>
+
+  <div class="section-label">// RÉFÉRENTIEL</div>
+  <div class="search-wrap">
+    <input type="text" id="recherche" placeholder="Rechercher une spécialité..." oninput="filtrerSpe()">
+  </div>
+  <div class="spe-grid" id="grille-spe">
+    <div class="spe"><div class="nom">Allergologie</div><div class="domaine">Allergies et maladies liées à des réactions allergiques</div></div>
+    <div class="spe"><div class="nom">Cardiologie</div><div class="domaine">Cœur et appareil cardiovasculaire</div></div>
+    <div class="spe"><div class="nom">Chirurgie orthopédique</div><div class="domaine">Traitement chirurgical des os, articulations et appareil locomoteur</div></div>
+    <div class="spe"><div class="nom">Dermatologie</div><div class="domaine">Peau, cheveux et ongles</div></div>
+    <div class="spe"><div class="nom">Endocrinologie</div><div class="domaine">Hormones et glandes endocrines ; diabète, thyroïde</div></div>
+    <div class="spe"><div class="nom">Gastro-entérologie</div><div class="domaine">Appareil digestif</div></div>
+    <div class="spe"><div class="nom">Gériatrie</div><div class="domaine">Santé et pathologies de la personne âgée</div></div>
+    <div class="spe"><div class="nom">Gynécologie</div><div class="domaine">Appareil génital féminin et santé gynécologique</div></div>
+    <div class="spe"><div class="nom">Hématologie</div><div class="domaine">Sang et maladies hématologiques</div></div>
+    <div class="spe"><div class="nom">Néphrologie</div><div class="domaine">Reins et maladies rénales</div></div>
+    <div class="spe"><div class="nom">Neurologie</div><div class="domaine">Cerveau, moelle épinière, nerfs, système nerveux</div></div>
+    <div class="spe"><div class="nom">Oncologie</div><div class="domaine">Cancers</div></div>
+    <div class="spe"><div class="nom">Ophtalmologie</div><div class="domaine">Yeux et vision</div></div>
+    <div class="spe"><div class="nom">ORL</div><div class="domaine">Oreilles, nez, gorge et structures associées</div></div>
+    <div class="spe"><div class="nom">Pédiatrie</div><div class="domaine">Santé de l'enfant et de l'adolescent</div></div>
+    <div class="spe"><div class="nom">Pneumologie</div><div class="domaine">Poumons et appareil respiratoire</div></div>
+    <div class="spe"><div class="nom">Psychiatrie</div><div class="domaine">Troubles psychiatriques et santé mentale</div></div>
+    <div class="spe"><div class="nom">Radiologie</div><div class="domaine">Réalisation et interprétation des examens d'imagerie</div></div>
+    <div class="spe"><div class="nom">Rhumatologie</div><div class="domaine">Articulations, os, appareil locomoteur</div></div>
+    <div class="spe"><div class="nom">Urologie</div><div class="domaine">Appareil urinaire et appareil génital masculin</div></div>
+  </div>
+
+  <div class="section-label">// ENTRAÎNEMENT À L'ORIENTATION</div>
+  <div id="zone-qcm"></div>
+
+  <div class="score-box" id="score-box">
+    <div class="score-num" id="score-num">—</div>
+    <div class="score-msg" id="score-msg"></div>
+    <button class="btn-recommencer" onclick="recommencer()">Recommencer</button>
+  </div>
+
+  <div class="rappel">
+    Comprendre pour mieux accueillir, organiser et orienter — <strong>jamais pour diagnostiquer ou soigner.</strong>
+  </div>
+
+  <footer>MEDEXPERT · PRAXIS · RNCP 40800</footer>
+</div>
+
+<script>
+function filtrerSpe(){
+  const q = document.getElementById('recherche').value.toLowerCase().trim();
+  document.querySelectorAll('.spe').forEach(function(s){
+    s.classList.toggle('hidden', !s.textContent.toLowerCase().includes(q));
+  });
+}
+
+const QUESTIONS = [
+  {q:"Un patient présente une affection cutanée persistante.", opts:["Cardiologue","Dermatologue","Néphrologue"], ok:1,
+   exp:"La peau relève de la dermatologie."},
+  {q:"Un patient doit consulter pour des douleurs et une raideur articulaires chroniques.", opts:["Rhumatologue","Pneumologue","ORL"], ok:0,
+   exp:"Les articulations, os et appareil locomoteur relèvent de la rhumatologie."},
+  {q:"Une patiente est suivie pour une thyroïde qui fonctionne mal.", opts:["Gastro-entérologue","Endocrinologue","Urologue"], ok:1,
+   exp:"La thyroïde est une glande hormonale — endocrinologie."},
+  {q:"Un enfant de 8 ans doit être suivi pour sa croissance.", opts:["Gériatre","Pédiatre","Neurologue"], ok:1,
+   exp:"La santé de l'enfant relève de la pédiatrie."},
+  {q:"Un patient présente des calculs rénaux à répétition.", opts:["Néphrologue","Ophtalmologiste","Hématologue"], ok:0,
+   exp:"Les reins et maladies rénales relèvent de la néphrologie (l'urologie peut aussi intervenir sur certaines affections urinaires)."},
+  {q:"Une patiente doit faire suivre une anomalie détectée à la mammographie.", opts:["Oncologie / spécialité concernée","Rhumatologue","ORL"], ok:0,
+   exp:"Selon la nature de l'anomalie, le parcours s'oriente vers l'oncologie ou la spécialité de l'organe concerné."},
+  {q:"Un patient a une baisse de vision progressive liée à l'âge.", opts:["Ophtalmologiste","Dermatologue","Cardiologue"], ok:0,
+   exp:"Les yeux et la vision relèvent de l'ophtalmologie."},
+  {q:"Un patient présente une anomalie sanguine détectée sur une prise de sang.", opts:["Hématologue","Gynécologue","Pneumologue"], ok:0,
+   exp:"Le sang et les maladies hématologiques relèvent de l'hématologie."},
+];
+
+let repondu = [];
+
+function afficherQuestions(){
+  const zone = document.getElementById('zone-qcm');
+  repondu = new Array(QUESTIONS.length).fill(false);
+  zone.innerHTML = QUESTIONS.map((q, qi) => `
+    <div class="qcard" id="q-${qi}">
+      <div class="qnum">SITUATION ${qi+1}/${QUESTIONS.length}</div>
+      <div class="profil">${q.q}</div>
+      ${q.opts.map((o, oi) => `<button class="opt" onclick="repondre(${qi},${oi})">${o}</button>`).join('')}
+      <div class="explic" id="explic-${qi}"></div>
+    </div>
+  `).join('');
+}
+
+function repondre(qi, oi){
+  if(repondu[qi]) return;
+  repondu[qi] = true;
+  const q = QUESTIONS[qi];
+  const card = document.getElementById(`q-${qi}`);
+  const boutons = card.querySelectorAll('.opt');
+  boutons.forEach(b => b.disabled = true);
+  const explic = document.getElementById(`explic-${qi}`);
+
+  if(oi === q.ok){
+    boutons[oi].classList.add('ok');
+    explic.textContent = '✅ ' + q.exp;
+  } else {
+    boutons[oi].classList.add('ko');
+    boutons[q.ok].classList.add('ok');
+    explic.textContent = '❌ ' + q.exp;
+  }
+  explic.classList.add('show');
+
+  if(repondu.every(Boolean)){
+    setTimeout(afficherScore, 400);
+  }
+}
+
+function afficherScore(){
+  let score = 0;
+  QUESTIONS.forEach((q, qi) => {
+    const card = document.getElementById(`q-${qi}`);
+    if(!card.querySelector('.opt.ko')) score++;
+  });
+  document.getElementById('score-num').textContent = score + '/' + QUESTIONS.length;
+  document.getElementById('score-msg').textContent =
+    score === QUESTIONS.length ? '🎉 Parfait !' :
+    score >= QUESTIONS.length - 1 ? '👍 Très solide.' :
+    'Quelques relectures ne feraient pas de mal.';
+  document.getElementById('score-box').classList.add('show');
+}
+
+function recommencer(){
+  afficherQuestions();
+  document.getElementById('score-box').classList.remove('show');
+}
+
+afficherQuestions();
+</script>
+</body>
+</html>
