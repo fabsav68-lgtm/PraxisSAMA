@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PraxisSAMA · Accès</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbfaff; --bg2:#f4f3fe; --panel:#ffffff; --bdr:#e4e2f7;
+  --txt:#211f38; --txt2:#726f96; --indigo:#6366f1; --indigo-dk:#4338ca;
+  --gold:#f5a623; --red:#e8604a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Poppins',system-ui,sans-serif;
+  background:linear-gradient(160deg,var(--bg) 0%,var(--bg2) 100%);
+  color:var(--txt);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.wrap{max-width:400px;width:100%;text-align:center}
+.icon-mark{width:56px;height:56px;margin:0 auto 14px}
+.logo{font-weight:700;font-size:28px}
+.logo span{color:var(--indigo-dk)}
+.sub{font-size:12px;letter-spacing:2px;color:var(--txt2);text-transform:uppercase;margin-top:6px;margin-bottom:26px}
+
+.card{background:var(--panel);border:1.5px solid var(--indigo);border-radius:16px;padding:28px 24px;box-shadow:0 4px 20px rgba(67,56,202,.08)}
+.card h2{font-size:18px;margin-bottom:8px}
+.card p{font-size:13px;color:var(--txt2);line-height:1.6;margin-bottom:20px}
+
+input{
+  width:100%;padding:13px 16px;border-radius:10px;border:1.5px solid var(--bdr);
+  background:var(--bg2);color:var(--txt);font-size:15px;text-align:center;
+  letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;
+  outline:none;margin-bottom:8px;
+}
+input:focus{border-color:var(--indigo)}
+input.err{border-color:var(--red)}
+.msg-err{color:var(--red);font-size:12.5px;font-family:'JetBrains Mono',monospace;margin-bottom:14px;min-height:16px}
+
+button{
+  width:100%;padding:14px;border-radius:10px;border:none;
+  background:var(--indigo-dk);color:#fff;font-size:15px;font-weight:600;cursor:pointer;
+  transition:opacity .15s;
+}
+button:hover{opacity:.9}
+button:disabled{opacity:.5;cursor:not-allowed}
+
+#msg-paiement{display:none;background:rgba(99,102,241,.1);border:1.5px solid var(--indigo-dk);border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.6;text-align:center}
+
+footer{margin-top:26px;font-size:10.5px;letter-spacing:1px;color:var(--txt2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg class="icon-mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="casqueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#6366f1"/>
+        <stop offset="100%" stop-color="#4338ca"/>
+      </linearGradient>
+    </defs>
+    <path d="M 22,48 A 28,28 0 0,1 78,48" fill="none" stroke="url(#casqueGrad)" stroke-width="6" stroke-linecap="round"/>
+    <rect x="14" y="44" width="14" height="22" rx="7" fill="url(#casqueGrad)"/>
+    <rect x="72" y="44" width="14" height="22" rx="7" fill="url(#casqueGrad)"/>
+    <path d="M 79,64 Q 79,78 64,80" fill="none" stroke="url(#casqueGrad)" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="62" cy="80" r="5" fill="#f5a623"/>
+  </svg>
+  <div class="logo">Praxis<span>SAMA</span></div>
+  <div class="sub">Accès sécurisé</div>
+
+  <div id="msg-paiement"></div>
+
+  <div class="card">
+    <h2>🔒 Code d'accès</h2>
+    <p>Saisissez le code fourni par votre formateur pour accéder aux modules PraxisSAMA.</p>
+
+    <input type="text" id="code-input" placeholder="SAMA-CCP1-001" autocomplete="off" autocapitalize="characters">
+    <div class="msg-err" id="msg-err"></div>
+
+    <button id="btn-acceder" onclick="tenterAcces()">Accéder à PraxisSAMA →</button>
+  </div>
+
+  <footer>PRAXISSAMA · MEDEXPERT · RNCP 40800</footer>
+</div>
+
+<script>
+const VERIF_CACHE_KEY = 'praxisama_verif_cache';
+const VERIF_CACHE_DUREE_MS = 24 * 60 * 60 * 1000; // 24h
+
+function lireVerifCache(code){
+  try{
+    const brut = localStorage.getItem(VERIF_CACHE_KEY);
+    if(!brut) return null;
+    const data = JSON.parse(brut);
+    if(data.code !== code) return null;
+    return data;
+  }catch(e){ return null; }
+}
+
+function ecrireVerifCache(code, resultat){
+  try{
+    localStorage.setItem(VERIF_CACHE_KEY, JSON.stringify({
+      code: code, resultat: resultat, verifiedAt: Date.now(),
+    }));
+  }catch(e){ }
+}
+
+async function verifierAccesAvecCache(code, app){
+  const cache = lireVerifCache(code);
+  const cacheEncoreValide = cache && (Date.now() - cache.verifiedAt) < VERIF_CACHE_DUREE_MS;
+
+  if(cacheEncoreValide){
+    console.log('Accès vérifié depuis le cache local (moins de 24h)');
+    return cache.resultat;
+  }
+
+  try{
+    const reponse = await fetch('https://fvrfiikrasezlzpaxpqz.supabase.co/functions/v1/verifier-acces', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': 'sb_publishable_TNksbociGaWCY53M4wCAXg_faOxEqKt',
+        'Authorization': 'Bearer sb_publishable_TNksbociGaWCY53M4wCAXg_faOxEqKt',
+      },
+      body: JSON.stringify({ code, app }),
+    });
+    const resultat = await reponse.json();
+    if(resultat.valide){
+      ecrireVerifCache(code, resultat);
+    }
+    return resultat;
+  }catch(erreurReseau){
+    if(cache){
+      console.log('Hors-ligne : reprise du dernier résultat connu, vérification différée');
+      return cache.resultat;
+    }
+    return { valide:false, message:'Connexion requise pour la première vérification de ce code' };
+  }
+}
+
+async function tenterAcces(){
+  const input = document.getElementById('code-input');
+  const btn = document.getElementById('btn-acceder');
+  const msgErr = document.getElementById('msg-err');
+  const code = input.value.trim().toUpperCase();
+
+  msgErr.textContent = '';
+  input.classList.remove('err');
+
+  if(!code){
+    msgErr.textContent = 'Veuillez saisir un code.';
+    input.classList.add('err');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Vérification...';
+
+  const resultat = await verifierAccesAvecCache(code, 'PraxisSAMA');
+
+  btn.disabled = false;
+  btn.textContent = 'Accéder à PraxisSAMA →';
+
+  if(!resultat.valide){
+    msgErr.textContent = 'Code non reconnu ou inactif';
+    input.classList.add('err');
+    return;
+  }
+
+  sessionStorage.setItem('praxisama_code', code);
+  if(resultat.annee) sessionStorage.setItem('praxisama_annee', resultat.annee);
+
+  window.location.href = 'index.html';
+}
+
+document.getElementById('code-input').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') tenterAcces();
+});
+
+// Message de confirmation après retour de paiement Stripe (pour quand la page d'achat existera)
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const statut = params.get('paiement');
+  const zone = document.getElementById('msg-paiement');
+  if(!zone) return;
+
+  if(statut === 'succes'){
+    zone.style.display = 'block';
+    zone.innerHTML = '✅ <strong>Paiement réussi !</strong><br>Votre code d\'accès arrive par email dans quelques instants.';
+  } else if(statut === 'annule'){
+    zone.style.display = 'block';
+    zone.style.background = 'rgba(232,96,74,.08)';
+    zone.style.borderColor = 'var(--red)';
+    zone.innerHTML = 'Paiement annulé — vous pouvez réessayer quand vous le souhaitez.';
+  }
+
+  if(statut){
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+})();
+</script>
+</body>
+</html>
