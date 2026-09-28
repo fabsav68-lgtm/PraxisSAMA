@@ -73,6 +73,12 @@ h1 span{color:var(--indigo-dk)}
 
 footer{text-align:center;padding:30px 20px 10px;color:var(--txt2);font-size:11px}
 </style>
+<script>
+  // Vérification de session : redirige vers l'accès si aucun code valide n'est présent
+  if (!sessionStorage.getItem('praxisama_code')) {
+    window.location.replace('acces-sama.html');
+  }
+</script>
 </head>
 <body>
 <div class="wrap">
