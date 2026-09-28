@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PraxisSAMA · Glossaire</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbfaff; --bg2:#f4f3fe; --panel:#ffffff; --bdr:#e4e2f7;
+  --txt:#211f38; --txt2:#726f96; --indigo:#6366f1; --indigo-dk:#4338ca;
+  --gold:#f5a623; --red:#e8604a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Poppins',system-ui,sans-serif;
+  background:linear-gradient(160deg,var(--bg) 0%,var(--bg2) 100%);
+  color:var(--txt);min-height:100vh;padding-bottom:60px;
+}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+
+.topbar{display:flex;align-items:center;gap:10px;padding:20px 0 6px}
+.back-link{display:flex;align-items:center;gap:6px;color:var(--txt2);text-decoration:none;font-size:13px}
+.back-link svg{width:20px;height:20px}
+
+header{padding:16px 0 20px}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;letter-spacing:1px;color:var(--indigo-dk);background:rgba(99,102,241,.1);
+  border:1px solid rgba(99,102,241,.3);padding:5px 12px;border-radius:20px;margin-bottom:12px;
+}
+h1{font-weight:700;font-size:clamp(24px,5.5vw,32px);letter-spacing:-.3px}
+.tagline{color:var(--txt2);font-size:14px;margin-top:8px;max-width:480px;line-height:1.6}
+
+.search-wrap{position:sticky;top:0;background:var(--bg);padding:14px 0;z-index:10;margin-top:8px}
+#recherche{
+  width:100%;padding:13px 16px;border-radius:12px;border:1.5px solid var(--bdr);
+  background:var(--panel);color:var(--txt);font-size:15px;font-family:'Poppins',sans-serif;
+  box-shadow:0 2px 10px rgba(67,56,202,.06);
+}
+#recherche:focus{outline:none;border-color:var(--indigo)}
+.compteur{font-size:11.5px;color:var(--txt2);margin-top:8px;font-family:'JetBrains Mono',monospace}
+
+.cat-label{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;
+  color:var(--txt2);margin:28px 0 10px;
+}
+
+.terme{
+  background:var(--panel);border:1px solid var(--bdr);border-radius:12px;
+  padding:14px 16px;margin-bottom:8px;box-shadow:0 1px 6px rgba(67,56,202,.04);
+}
+.terme .mot{font-weight:600;font-size:15px;color:var(--indigo-dk)}
+.terme .def{font-size:13.5px;color:var(--txt);line-height:1.55;margin-top:4px}
+.terme.hidden{display:none}
+
+.affixe-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:480px){.affixe-grid{grid-template-columns:1fr}}
+.affixe{background:var(--panel);border:1px solid var(--bdr);border-radius:10px;padding:10px 14px;box-shadow:0 1px 6px rgba(67,56,202,.04)}
+.affixe.hidden{display:none}
+.affixe .elt{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold);font-size:13.5px}
+.affixe .sens{font-size:12.5px;color:var(--txt);margin-top:2px}
+.affixe .ex{font-size:11px;color:var(--txt2);margin-top:2px;font-style:italic}
+
+.aucun{display:none;text-align:center;color:var(--txt2);font-size:13px;padding:30px 0}
+
+.rappel{
+  background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.25);border-radius:12px;
+  padding:14px 16px;margin:28px 0 6px;font-size:12.5px;color:var(--txt);line-height:1.6;text-align:center;
+}
+.rappel strong{color:#b8760f}
+
+footer{text-align:center;padding:30px 20px 10px;color:var(--txt2);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <a class="back-link" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      PraxisSAMA
+    </a>
+  </div>
+
+  <header>
+    <div class="badge">GLOSSAIRE</div>
+    <h1>Vocabulaire essentiel</h1>
+    <p class="tagline">Comprendre le mot rencontré dans un dossier ou au téléphone — jamais pour diagnostiquer.</p>
+  </header>
+
+  <div class="search-wrap">
+    <input type="text" id="recherche" placeholder="Rechercher un terme..." oninput="filtrer()">
+    <div class="compteur" id="compteur"></div>
+  </div>
+
+  <div id="liste">
+
+    <div class="cat-label">// VOCABULAIRE MÉDICAL GÉNÉRAL</div>
+    <div class="terme"><div class="mot">Aigu</div><div class="def">Qui apparaît rapidement ou évolue sur une courte période.</div></div>
+    <div class="terme"><div class="mot">Anamnèse</div><div class="def">Ensemble des informations recueillies sur l'histoire médicale et les symptômes d'un patient.</div></div>
+    <div class="terme"><div class="mot">Antécédent</div><div class="def">Maladie, intervention ou événement de santé survenu auparavant.</div></div>
+    <div class="terme"><div class="mot">Asymptomatique</div><div class="def">Qui ne présente pas de symptôme apparent.</div></div>
+    <div class="terme"><div class="mot">Bénin</div><div class="def">Se dit notamment d'une lésion ou tumeur non cancéreuse. Ne signifie pas nécessairement "sans conséquence".</div></div>
+    <div class="terme"><div class="mot">Chronique</div><div class="def">Qui persiste ou évolue sur une longue période.</div></div>
+    <div class="terme"><div class="mot">Consultation</div><div class="def">Rencontre entre un patient et un professionnel de santé pour une prise en charge.</div></div>
+    <div class="terme"><div class="mot">Diagnostic</div><div class="def">Identification par un professionnel habilité d'une maladie ou d'un problème de santé à partir des informations disponibles.</div></div>
+    <div class="terme"><div class="mot">Dossier patient</div><div class="def">Ensemble des informations administratives et médicales concernant la prise en charge d'un patient.</div></div>
+    <div class="terme"><div class="mot">Dysphagie</div><div class="def">Difficulté à avaler.</div></div>
+    <div class="terme"><div class="mot">Dyspnée</div><div class="def">Difficulté à respirer ou sensation de manque d'air.</div></div>
+    <div class="terme"><div class="mot">Épidémie</div><div class="def">Augmentation du nombre de cas d'une maladie dans une population et une période données.</div></div>
+    <div class="terme"><div class="mot">Fracture</div><div class="def">Rupture ou cassure d'un os.</div></div>
+    <div class="terme"><div class="mot">Glycémie</div><div class="def">Quantité de glucose présente dans le sang.</div></div>
+    <div class="terme"><div class="mot">Hématurie</div><div class="def">Présence de sang dans les urines.</div></div>
+    <div class="terme"><div class="mot">Hospitalisation ambulatoire</div><div class="def">Prise en charge permettant généralement au patient de rentrer chez lui le jour même, sans nuit d'hospitalisation. "Ambulatoire" ne signifie pas "ambulance".</div></div>
+    <div class="terme"><div class="mot">Hyperglycémie</div><div class="def">Taux de glucose sanguin trop élevé.</div></div>
+    <div class="terme"><div class="mot">Hypoglycémie</div><div class="def">Taux de glucose sanguin trop bas.</div></div>
+    <div class="terme"><div class="mot">Identitovigilance</div><div class="def">Ensemble des mesures destinées à identifier correctement un patient et à éviter les erreurs d'identité.</div></div>
+    <div class="terme"><div class="mot">Infection</div><div class="def">Pénétration et multiplication d'un agent infectieux dans l'organisme, pouvant provoquer une maladie.</div></div>
+    <div class="terme"><div class="mot">Lésion</div><div class="def">Modification ou atteinte d'un tissu ou d'un organe. Le terme seul ne permet pas de déterminer sa gravité.</div></div>
+    <div class="terme"><div class="mot">Malin</div><div class="def">En cancérologie, qualifie une tumeur cancéreuse susceptible notamment d'envahir les tissus ou de se propager.</div></div>
+    <div class="terme"><div class="mot">Métastase</div><div class="def">Foyer cancéreux apparu à distance de la tumeur d'origine par propagation de cellules cancéreuses.</div></div>
+    <div class="terme"><div class="mot">Nodule</div><div class="def">Petite masse ou formation arrondie dans un tissu ou un organe. Sa présence ne signifie pas automatiquement cancer.</div></div>
+    <div class="terme"><div class="mot">Œdème</div><div class="def">Gonflement lié à une accumulation de liquide dans les tissus.</div></div>
+    <div class="terme"><div class="mot">Ordonnance</div><div class="def">Document par lequel un professionnel habilité prescrit notamment des médicaments, examens, dispositifs ou soins.</div></div>
+    <div class="terme"><div class="mot">Pathologie</div><div class="def">Maladie ou trouble affectant la santé.</div></div>
+    <div class="terme"><div class="mot">Posologie</div><div class="def">Quantité, fréquence et modalités d'administration d'un médicament.</div></div>
+    <div class="terme"><div class="mot">Prescription</div><div class="def">Indication donnée par un professionnel habilité concernant un traitement, un examen ou des soins.</div></div>
+    <div class="terme"><div class="mot">Pronostic</div><div class="def">Évaluation médicale de l'évolution probable d'une maladie.</div></div>
+    <div class="terme"><div class="mot">Récidive</div><div class="def">Réapparition d'une maladie après une période d'amélioration ou de disparition.</div></div>
+    <div class="terme"><div class="mot">Rémission</div><div class="def">Diminution ou disparition des signes d'une maladie pendant une période donnée.</div></div>
+    <div class="terme"><div class="mot">Secret professionnel</div><div class="def">Obligation de ne pas révéler les informations confidentielles connues dans le cadre professionnel, sauf situations prévues par la loi.</div></div>
+    <div class="terme"><div class="mot">Symptôme</div><div class="def">Manifestation ressentie ou constatée pouvant être associée à une maladie.</div></div>
+    <div class="terme"><div class="mot">Tension artérielle</div><div class="def">Pression exercée par le sang sur la paroi des artères.</div></div>
+    <div class="terme"><div class="mot">Tumeur</div><div class="def">Masse liée à une multiplication anormale de cellules. Une tumeur peut être bénigne ou maligne.</div></div>
+
+    <div class="cat-label">// EXAMENS ET ACTES COURANTS</div>
+    <div class="terme"><div class="mot">Analyse de sang</div><div class="def">Analyse réalisée à partir d'un prélèvement sanguin afin de mesurer ou rechercher différents éléments.</div></div>
+    <div class="terme"><div class="mot">Bilan biologique</div><div class="def">Ensemble d'analyses réalisées sur des prélèvements biologiques, souvent sanguins ou urinaires.</div></div>
+    <div class="terme"><div class="mot">Biopsie</div><div class="def">Prélèvement d'un fragment de tissu ou de cellules afin de l'analyser.</div></div>
+    <div class="terme"><div class="mot">Coloscopie</div><div class="def">Examen permettant d'observer l'intérieur du côlon à l'aide d'un endoscope.</div></div>
+    <div class="terme"><div class="mot">Doppler</div><div class="def">Examen utilisant les ultrasons pour étudier notamment la circulation du sang dans les vaisseaux.</div></div>
+    <div class="terme"><div class="mot">ECBU</div><div class="def">Examen cytobactériologique des urines, notamment utilisé pour rechercher une infection urinaire.</div></div>
+    <div class="terme"><div class="mot">Échographie</div><div class="def">Examen d'imagerie utilisant des ultrasons.</div></div>
+    <div class="terme"><div class="mot">ECG</div><div class="def">Électrocardiogramme — enregistrement de l'activité électrique du cœur.</div></div>
+    <div class="terme"><div class="mot">EEG</div><div class="def">Électroencéphalogramme — enregistrement de l'activité électrique du cerveau.</div></div>
+    <div class="terme"><div class="mot">Endoscopie</div><div class="def">Examen permettant d'observer l'intérieur d'un organe ou d'une cavité avec un dispositif adapté.</div></div>
+    <div class="terme"><div class="mot">Frottis cervico-utérin</div><div class="def">Prélèvement de cellules au niveau du col de l'utérus dans le cadre notamment du dépistage du cancer du col.</div></div>
+    <div class="terme"><div class="mot">Gastroscopie</div><div class="def">Endoscopie permettant d'examiner notamment l'œsophage, l'estomac et le début de l'intestin grêle.</div></div>
+    <div class="terme"><div class="mot">Holter ECG</div><div class="def">Enregistrement prolongé de l'activité électrique du cœur, généralement pendant 24 heures ou davantage.</div></div>
+    <div class="terme"><div class="mot">IRM</div><div class="def">Imagerie par résonance magnétique — technique d'imagerie utilisant notamment un champ magnétique et des ondes radio.</div></div>
+    <div class="terme"><div class="mot">Mammographie</div><div class="def">Radiographie des seins utilisée notamment dans le dépistage et le diagnostic de certaines anomalies mammaires.</div></div>
+    <div class="terme"><div class="mot">Radiographie</div><div class="def">Examen d'imagerie utilisant des rayons X.</div></div>
+    <div class="terme"><div class="mot">Scanner / TDM</div><div class="def">Examen utilisant des rayons X et l'informatique pour produire des images détaillées de l'organisme.</div></div>
+    <div class="terme"><div class="mot">Spirométrie</div><div class="def">Examen permettant de mesurer certaines capacités et certains débits respiratoires.</div></div>
+    <div class="terme"><div class="mot">Test d'effort</div><div class="def">Examen permettant d'étudier notamment la réponse cardiovasculaire à un effort contrôlé.</div></div>
+
+    <div class="cat-label">// INTERVENTIONS : LES MOTS À RECONNAÎTRE</div>
+    <div class="terme"><div class="mot">Ablation</div><div class="def">Retrait d'un tissu, d'une lésion, d'un dispositif ou d'un organe selon le contexte.</div></div>
+    <div class="terme"><div class="mot">Appendicectomie</div><div class="def">Ablation chirurgicale de l'appendice.</div></div>
+    <div class="terme"><div class="mot">Arthroplastie</div><div class="def">Intervention visant à réparer ou remplacer tout ou partie d'une articulation.</div></div>
+    <div class="terme"><div class="mot">Césarienne</div><div class="def">Intervention permettant la naissance d'un enfant par ouverture chirurgicale de l'abdomen et de l'utérus.</div></div>
+    <div class="terme"><div class="mot">Cholécystectomie</div><div class="def">Ablation chirurgicale de la vésicule biliaire.</div></div>
+    <div class="terme"><div class="mot">Colectomie</div><div class="def">Ablation chirurgicale de tout ou partie du côlon.</div></div>
+    <div class="terme"><div class="mot">Gastrectomie</div><div class="def">Ablation chirurgicale de tout ou partie de l'estomac.</div></div>
+    <div class="terme"><div class="mot">Hystérectomie</div><div class="def">Ablation chirurgicale de l'utérus.</div></div>
+    <div class="terme"><div class="mot">Néphrectomie</div><div class="def">Ablation chirurgicale d'un rein.</div></div>
+    <div class="terme"><div class="mot">Prothèse</div><div class="def">Dispositif destiné à remplacer tout ou partie d'un organe, d'une articulation ou d'une structure du corps.</div></div>
+    <div class="terme"><div class="mot">Suture</div><div class="def">Technique permettant de rapprocher les bords d'une plaie ou d'une incision.</div></div>
+
+    <div class="cat-label">// SPÉCIALITÉS MÉDICALES : QUI FAIT QUOI ?</div>
+    <div class="terme"><div class="mot">Allergologie</div><div class="def">Allergies et maladies liées à des réactions allergiques.</div></div>
+    <div class="terme"><div class="mot">Cardiologie</div><div class="def">Cœur et appareil cardiovasculaire.</div></div>
+    <div class="terme"><div class="mot">Chirurgie orthopédique</div><div class="def">Traitement chirurgical de nombreuses affections des os, articulations et appareil locomoteur.</div></div>
+    <div class="terme"><div class="mot">Dermatologie</div><div class="def">Peau, cheveux et ongles.</div></div>
+    <div class="terme"><div class="mot">Endocrinologie</div><div class="def">Hormones et glandes endocrines ; notamment diabète et thyroïde selon les situations.</div></div>
+    <div class="terme"><div class="mot">Gastro-entérologie</div><div class="def">Appareil digestif.</div></div>
+    <div class="terme"><div class="mot">Gériatrie</div><div class="def">Santé et pathologies de la personne âgée.</div></div>
+    <div class="terme"><div class="mot">Gynécologie</div><div class="def">Appareil génital féminin et santé gynécologique.</div></div>
+    <div class="terme"><div class="mot">Hématologie</div><div class="def">Sang et maladies hématologiques.</div></div>
+    <div class="terme"><div class="mot">Néphrologie</div><div class="def">Reins et maladies rénales.</div></div>
+    <div class="terme"><div class="mot">Neurologie</div><div class="def">Cerveau, moelle épinière, nerfs et système nerveux.</div></div>
+    <div class="terme"><div class="mot">Oncologie / cancérologie</div><div class="def">Cancers.</div></div>
+    <div class="terme"><div class="mot">Ophtalmologie</div><div class="def">Yeux et vision.</div></div>
+    <div class="terme"><div class="mot">ORL</div><div class="def">Oto-rhino-laryngologie — oreilles, nez, gorge et structures associées.</div></div>
+    <div class="terme"><div class="mot">Pédiatrie</div><div class="def">Santé de l'enfant et de l'adolescent.</div></div>
+    <div class="terme"><div class="mot">Pneumologie</div><div class="def">Poumons et appareil respiratoire.</div></div>
+    <div class="terme"><div class="mot">Psychiatrie</div><div class="def">Troubles psychiatriques et santé mentale.</div></div>
+    <div class="terme"><div class="mot">Radiologie / imagerie médicale</div><div class="def">Réalisation et interprétation médicale des examens d'imagerie.</div></div>
+    <div class="terme"><div class="mot">Rhumatologie</div><div class="def">Maladies des articulations, os et appareil locomoteur, dans leurs aspects médicaux.</div></div>
+    <div class="terme"><div class="mot">Urologie</div><div class="def">Affections de l'appareil urinaire et de l'appareil génital masculin.</div></div>
+
+    <div class="cat-label">// PARCOURS ADMINISTRATIF ET REMBOURSEMENT</div>
+    <div class="terme"><div class="mot">Assurance Maladie</div><div class="def">Branche de la Sécurité sociale assurant notamment la prise en charge d'une partie des dépenses de santé.</div></div>
+    <div class="terme"><div class="mot">Assuré social</div><div class="def">Personne affiliée à un régime de Sécurité sociale et bénéficiant de droits à l'Assurance Maladie.</div></div>
+    <div class="terme"><div class="mot">Attestation de droits</div><div class="def">Document attestant les droits d'une personne à l'Assurance Maladie.</div></div>
+    <div class="terme"><div class="mot">Carte Vitale</div><div class="def">Carte permettant l'identification de l'assuré et la transmission des informations nécessaires au remboursement des soins. Ne garantit pas à elle seule le paiement intégral des soins.</div></div>
+    <div class="terme"><div class="mot">CPAM</div><div class="def">Caisse Primaire d'Assurance Maladie — organisme local de l'Assurance Maladie pour les assurés relevant notamment du régime général.</div></div>
+    <div class="terme"><div class="mot">Complémentaire santé / mutuelle</div><div class="def">Organisme ou contrat complétant tout ou partie des remboursements de l'Assurance Maladie. Pour les salariés du privé, souvent proposée par l'employeur (collective), pas toujours individuelle.</div></div>
+    <div class="terme"><div class="mot">C2S</div><div class="def">Complémentaire Santé Solidaire — dispositif, sous conditions de ressources, remboursant intégralement les soins dans la limite des tarifs de la Sécurité sociale, gratuit ou avec petite participation.</div></div>
+    <div class="terme"><div class="mot">ALD</div><div class="def">Affection de Longue Durée nécessitant des soins prolongés. Certaines ALD ouvrent droit à une prise en charge à 100% du tarif de l'Assurance Maladie pour les soins liés à l'affection.</div></div>
+    <div class="terme"><div class="mot">Dépassement d'honoraires</div><div class="def">Partie des honoraires facturée au-delà du tarif servant de référence à l'Assurance Maladie.</div></div>
+    <div class="terme"><div class="mot">Feuille de soins</div><div class="def">Document permettant la transmission d'informations nécessaires au remboursement lorsqu'une transmission électronique n'est pas utilisée.</div></div>
+    <div class="terme"><div class="mot">Médecin traitant</div><div class="def">Médecin déclaré auprès de l'Assurance Maladie pour assurer notamment le suivi et la coordination du parcours de soins.</div></div>
+    <div class="terme"><div class="mot">NIR</div><div class="def">Numéro d'Inscription au Répertoire, couramment appelé numéro de Sécurité sociale — 15 chiffres (13 + clé de contrôle à 2 chiffres), attribué à vie.</div></div>
+    <div class="terme"><div class="mot">Parcours de soins coordonnés</div><div class="def">Organisation dans laquelle le médecin traitant joue un rôle central dans le suivi et l'orientation du patient.</div></div>
+    <div class="terme"><div class="mot">Reste à charge</div><div class="def">Somme restant finalement à payer par le patient après les différentes prises en charge (Assurance Maladie puis complémentaire).</div></div>
+    <div class="terme"><div class="mot">Télétransmission</div><div class="def">Transmission électronique des informations nécessaires notamment au remboursement des soins.</div></div>
+    <div class="terme"><div class="mot">Ticket modérateur</div><div class="def">Partie du tarif de référence restant en principe à la charge de l'assuré après remboursement de l'Assurance Maladie, avant éventuelle complémentaire.</div></div>
+    <div class="terme"><div class="mot">Tiers payant</div><div class="def">Dispositif permettant au patient de ne pas avancer tout ou partie des frais couverts par l'Assurance Maladie.</div></div>
+
+  </div>
+
+  <div class="cat-label" id="cat-affixes">// PRÉFIXES ET SUFFIXES INDISPENSABLES</div>
+  <div class="affixe-grid" id="grille-affixes">
+    <div class="affixe"><div class="elt">hyper-</div><div class="sens">excès, augmentation</div><div class="ex">hyperglycémie</div></div>
+    <div class="affixe"><div class="elt">hypo-</div><div class="sens">diminution, insuffisance</div><div class="ex">hypoglycémie</div></div>
+    <div class="affixe"><div class="elt">tachy-</div><div class="sens">rapide</div><div class="ex">tachycardie</div></div>
+    <div class="affixe"><div class="elt">brady-</div><div class="sens">lent</div><div class="ex">bradycardie</div></div>
+    <div class="affixe"><div class="elt">dys-</div><div class="sens">difficulté, anomalie</div><div class="ex">dysphagie</div></div>
+    <div class="affixe"><div class="elt">hém-/hémo-</div><div class="sens">sang</div><div class="ex">hématurie</div></div>
+    <div class="affixe"><div class="elt">cardio-</div><div class="sens">cœur</div><div class="ex">cardiologie</div></div>
+    <div class="affixe"><div class="elt">néphr-</div><div class="sens">rein</div><div class="ex">néphrologie</div></div>
+    <div class="affixe"><div class="elt">neuro-</div><div class="sens">système nerveux</div><div class="ex">neurologie</div></div>
+    <div class="affixe"><div class="elt">dermato-</div><div class="sens">peau</div><div class="ex">dermatologie</div></div>
+    <div class="affixe"><div class="elt">gastro-</div><div class="sens">estomac</div><div class="ex">gastroscopie</div></div>
+    <div class="affixe"><div class="elt">pneumo-</div><div class="sens">poumon / respiration</div><div class="ex">pneumologie</div></div>
+    <div class="affixe"><div class="elt">-ite</div><div class="sens">inflammation</div><div class="ex">bronchite</div></div>
+    <div class="affixe"><div class="elt">-algie</div><div class="sens">douleur</div><div class="ex">lombalgie</div></div>
+    <div class="affixe"><div class="elt">-ectomie</div><div class="sens">ablation chirurgicale</div><div class="ex">appendicectomie</div></div>
+    <div class="affixe"><div class="elt">-scopie</div><div class="sens">observation/exploration visuelle</div><div class="ex">coloscopie</div></div>
+    <div class="affixe"><div class="elt">-logie</div><div class="sens">étude / spécialité</div><div class="ex">cardiologie</div></div>
+    <div class="affixe"><div class="elt">-urie</div><div class="sens">relatif aux urines</div><div class="ex">hématurie</div></div>
+    <div class="affixe"><div class="elt">-émie</div><div class="sens">relatif au sang</div><div class="ex">glycémie</div></div>
+    <div class="affixe"><div class="elt">-ome</div><div class="sens">masse / tumeur</div><div class="ex">(dans de nombreux termes)</div></div>
+  </div>
+
+  <div class="aucun" id="aucun">Aucun terme ne correspond à votre recherche.</div>
+
+  <div class="rappel">
+    Comprendre pour mieux accueillir, organiser et orienter — <strong>jamais pour diagnostiquer ou soigner.</strong>
+  </div>
+
+  <footer>MEDEXPERT · PRAXIS · RNCP 40800</footer>
+</div>
+
+<script>
+function filtrer(){
+  const q = document.getElementById('recherche').value.toLowerCase().trim();
+  const termes = document.querySelectorAll('.terme');
+  const affixes = document.querySelectorAll('.affixe');
+  const cats = document.querySelectorAll('.cat-label');
+  let visibles = 0;
+
+  termes.forEach(function(t){
+    const texte = t.textContent.toLowerCase();
+    const match = texte.includes(q);
+    t.classList.toggle('hidden', !match);
+    if(match) visibles++;
+  });
+
+  affixes.forEach(function(a){
+    const texte = a.textContent.toLowerCase();
+    const match = texte.includes(q);
+    a.classList.toggle('hidden', !match);
+    if(match) visibles++;
+  });
+
+  cats.forEach(function(cat){
+    if(cat.id === 'cat-affixes'){
+      const uneVisible = Array.from(affixes).some(a => !a.classList.contains('hidden'));
+      cat.style.display = uneVisible ? '' : 'none';
+      document.getElementById('grille-affixes').style.display = uneVisible ? '' : 'none';
+      return;
+    }
+    let el = cat.nextElementSibling;
+    let aUnVisible = false;
+    while(el && el.classList.contains('terme')){
+      if(!el.classList.contains('hidden')) aUnVisible = true;
+      el = el.nextElementSibling;
+    }
+    cat.style.display = aUnVisible ? '' : 'none';
+  });
+
+  document.getElementById('aucun').style.display = visibles === 0 ? 'block' : 'none';
+  document.getElementById('compteur').textContent = q ? visibles + ' résultat(s)' : '';
+}
+</script>
+</body>
+</html>
