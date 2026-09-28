@@ -1,0 +1,20 @@
+{
+  "name": "PraxisSAMA · Secrétaire Assistant Médico-Administratif",
+  "short_name": "PraxisSAMA",
+  "description": "Formation SAMA — RNCP 40800, 2 blocs de compétences",
+  "start_url": "./acces-sama.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbfaff",
+  "theme_color": "#4338ca",
+  "orientation": "portrait",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "apple-touch-icon-sama.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
