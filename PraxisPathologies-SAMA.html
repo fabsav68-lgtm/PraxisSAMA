@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PraxisSAMA · Pathologies courantes</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbfaff; --bg2:#f4f3fe; --panel:#ffffff; --bdr:#e4e2f7;
+  --txt:#211f38; --txt2:#726f96; --indigo:#6366f1; --indigo-dk:#4338ca;
+  --gold:#f5a623; --red:#e8604a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Poppins',system-ui,sans-serif;
+  background:linear-gradient(160deg,var(--bg) 0%,var(--bg2) 100%);
+  color:var(--txt);min-height:100vh;padding-bottom:60px;
+}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+
+.topbar{display:flex;align-items:center;gap:10px;padding:20px 0 6px}
+.back-link{display:flex;align-items:center;gap:6px;color:var(--txt2);text-decoration:none;font-size:13px}
+.back-link svg{width:20px;height:20px}
+
+header{padding:16px 0 20px}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;letter-spacing:1px;color:var(--indigo-dk);background:rgba(99,102,241,.1);
+  border:1px solid rgba(99,102,241,.3);padding:5px 12px;border-radius:20px;margin-bottom:12px;
+}
+h1{font-weight:700;font-size:clamp(24px,5.5vw,32px);letter-spacing:-.3px}
+.tagline{color:var(--txt2);font-size:14px;margin-top:8px;max-width:480px;line-height:1.6}
+
+.search-wrap{position:sticky;top:0;background:var(--bg);padding:14px 0;z-index:10;margin-top:8px}
+#recherche{
+  width:100%;padding:13px 16px;border-radius:12px;border:1.5px solid var(--bdr);
+  background:var(--panel);color:var(--txt);font-size:15px;font-family:'Poppins',sans-serif;
+  box-shadow:0 2px 10px rgba(67,56,202,.06);
+}
+#recherche:focus{outline:none;border-color:var(--indigo)}
+.compteur{font-size:11.5px;color:var(--txt2);margin-top:8px;font-family:'JetBrains Mono',monospace}
+
+.cat-label{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;
+  color:var(--txt2);margin:28px 0 10px;display:flex;align-items:center;gap:8px;
+}
+
+.fiche{
+  background:var(--panel);border:1px solid var(--bdr);border-radius:14px;
+  padding:16px;margin-bottom:10px;box-shadow:0 1px 8px rgba(67,56,202,.05);
+}
+.fiche.hidden{display:none}
+.fiche .nom{font-weight:700;font-size:15.5px;color:var(--indigo-dk)}
+.fiche .clair{font-size:13.5px;color:var(--txt);margin-top:5px;line-height:1.5}
+.fiche .ligne{font-size:12px;color:var(--txt2);margin-top:6px;line-height:1.5}
+.fiche .ligne b{color:var(--txt)}
+
+.aucun{display:none;text-align:center;color:var(--txt2);font-size:13px;padding:30px 0}
+
+.rappel{
+  background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.25);border-radius:12px;
+  padding:14px 16px;margin:28px 0 6px;font-size:12.5px;color:var(--txt);line-height:1.6;text-align:center;
+}
+.rappel strong{color:#b8760f}
+
+footer{text-align:center;padding:30px 20px 10px;color:var(--txt2);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <a class="back-link" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      PraxisSAMA
+    </a>
+  </div>
+
+  <header>
+    <div class="badge">PATHOLOGIES COURANTES</div>
+    <h1>50 fiches à connaître</h1>
+    <p class="tagline">Une définition simple, la partie du corps concernée, le vocabulaire à reconnaître, et l'orientation fréquente.</p>
+  </header>
+
+  <div class="search-wrap">
+    <input type="text" id="recherche" placeholder="Rechercher une pathologie, un mot..." oninput="filtrer()">
+    <div class="compteur" id="compteur"></div>
+  </div>
+
+  <div id="liste">
+
+    <div class="cat-label">❤️ CŒUR ET CIRCULATION</div>
+    <div class="fiche"><div class="nom">Hypertension artérielle (HTA)</div><div class="clair">Pression du sang durablement trop élevée dans les artères.</div><div class="ligne"><b>Concerne :</b> cœur et vaisseaux · <b>Mots :</b> tension, pression artérielle, HTA, antihypertenseur · <b>Orientation :</b> médecin traitant / cardiologue</div></div>
+    <div class="fiche"><div class="nom">Insuffisance cardiaque</div><div class="clair">Le cœur n'assure plus suffisamment efficacement son rôle de pompe.</div><div class="ligne"><b>Concerne :</b> cœur · <b>Mots :</b> essoufflement, œdème, fatigue, dyspnée · <b>Orientation :</b> médecin traitant / cardiologue</div></div>
+    <div class="fiche"><div class="nom">Maladie coronarienne / angine de poitrine</div><div class="clair">Mauvaise irrigation du cœur par les artères coronaires.</div><div class="ligne"><b>Concerne :</b> cœur et artères coronaires · <b>Mots :</b> douleur thoracique, angor, coronaires, ECG · <b>Orientation :</b> cardiologie</div></div>
+    <div class="fiche"><div class="nom">Infarctus du myocarde</div><div class="clair">Obstruction brutale d'une artère du cœur pouvant endommager une partie du muscle cardiaque.</div><div class="ligne"><b>Concerne :</b> cœur · <b>Mots :</b> infarctus, douleur thoracique, coronaires, urgence · <b>Orientation :</b> urgence / cardiologie</div></div>
+    <div class="fiche"><div class="nom">Trouble du rythme cardiaque</div><div class="clair">Anomalie de la vitesse ou de la régularité des battements du cœur.</div><div class="ligne"><b>Concerne :</b> cœur · <b>Mots :</b> arythmie, palpitations, tachycardie, bradycardie, fibrillation · <b>Orientation :</b> cardiologie</div></div>
+
+    <div class="cat-label">🫁 RESPIRATION</div>
+    <div class="fiche"><div class="nom">Asthme</div><div class="clair">Maladie chronique des bronches pouvant provoquer des épisodes de gêne respiratoire.</div><div class="ligne"><b>Concerne :</b> bronches · <b>Mots :</b> crise, sifflements, toux, dyspnée, inhalateur · <b>Orientation :</b> médecin traitant / pneumologue</div></div>
+    <div class="fiche"><div class="nom">BPCO</div><div class="clair">Maladie chronique qui gêne durablement le passage de l'air dans les bronches.</div><div class="ligne"><b>Concerne :</b> bronches et poumons · <b>Mots :</b> essoufflement, toux, expectorations, spirométrie · <b>Orientation :</b> pneumologie</div></div>
+    <div class="fiche"><div class="nom">Bronchite aiguë</div><div class="clair">Inflammation temporaire des bronches, le plus souvent d'origine virale.</div><div class="ligne"><b>Concerne :</b> bronches · <b>Mots :</b> toux, expectorations, fièvre · <b>Orientation :</b> médecin traitant</div></div>
+    <div class="fiche"><div class="nom">Pneumonie</div><div class="clair">Infection du tissu pulmonaire.</div><div class="ligne"><b>Concerne :</b> poumons · <b>Mots :</b> fièvre, toux, dyspnée, radiographie thoracique · <b>Orientation :</b> médecin traitant / pneumologie / urgences selon la situation</div></div>
+    <div class="fiche"><div class="nom">Apnée du sommeil</div><div class="clair">Interruptions répétées de la respiration pendant le sommeil.</div><div class="ligne"><b>Concerne :</b> respiration pendant le sommeil · <b>Mots :</b> ronflement, apnées, somnolence, polygraphie · <b>Orientation :</b> pneumologie / ORL selon le parcours</div></div>
+
+    <div class="cat-label">🧠 NEUROLOGIE</div>
+    <div class="fiche"><div class="nom">Migraine</div><div class="clair">Maladie provoquant des crises répétées de maux de tête, parfois accompagnées d'autres symptômes.</div><div class="ligne"><b>Mots :</b> céphalée, crise, nausées, aura · <b>Orientation :</b> médecin traitant / neurologue</div></div>
+    <div class="fiche"><div class="nom">AVC</div><div class="clair">Atteinte brutale du cerveau provoquée par l'interruption ou la rupture de la circulation sanguine cérébrale.</div><div class="ligne"><b>Concerne :</b> cerveau · <b>Mots :</b> paralysie, trouble de la parole, AVC ischémique/hémorragique · <b>Orientation :</b> urgence / neurologie</div></div>
+    <div class="fiche"><div class="nom">Épilepsie</div><div class="clair">Maladie neurologique caractérisée par une prédisposition à présenter des crises épileptiques.</div><div class="ligne"><b>Concerne :</b> cerveau · <b>Mots :</b> crise, convulsions, EEG, traitement antiépileptique · <b>Orientation :</b> neurologie</div></div>
+    <div class="fiche"><div class="nom">Maladie d'Alzheimer</div><div class="clair">Maladie neurodégénérative entraînant progressivement des troubles de la mémoire et d'autres fonctions cognitives.</div><div class="ligne"><b>Concerne :</b> cerveau · <b>Mots :</b> mémoire, cognition, troubles cognitifs, autonomie · <b>Orientation :</b> consultation mémoire / neurologie ou gériatrie</div></div>
+    <div class="fiche"><div class="nom">Maladie de Parkinson</div><div class="clair">Maladie neurologique progressive affectant notamment les mouvements.</div><div class="ligne"><b>Concerne :</b> cerveau et motricité · <b>Mots :</b> tremblement, lenteur, rigidité, équilibre · <b>Orientation :</b> neurologie</div></div>
+
+    <div class="cat-label">🍽️ APPAREIL DIGESTIF</div>
+    <div class="fiche"><div class="nom">Reflux gastro-œsophagien (RGO)</div><div class="clair">Remontée d'une partie du contenu de l'estomac vers l'œsophage.</div><div class="ligne"><b>Mots :</b> reflux, brûlures, acidité, œsophage · <b>Orientation :</b> médecin traitant / gastro-entérologue</div></div>
+    <div class="fiche"><div class="nom">Gastro-entérite</div><div class="clair">Affection digestive, souvent infectieuse, provoquant notamment diarrhées et/ou vomissements.</div><div class="ligne"><b>Concerne :</b> estomac et intestins · <b>Mots :</b> diarrhée, vomissements, douleurs abdominales · <b>Orientation :</b> médecin traitant</div></div>
+    <div class="fiche"><div class="nom">Constipation</div><div class="clair">Selles trop rares ou difficiles à évacuer.</div><div class="ligne"><b>Mots :</b> transit, selles, ballonnement · <b>Orientation :</b> médecin traitant / gastro-entérologie si nécessaire</div></div>
+    <div class="fiche"><div class="nom">Calculs biliaires</div><div class="clair">Formation de calculs, le plus souvent dans la vésicule biliaire.</div><div class="ligne"><b>Mots :</b> lithiase, vésicule, colique hépatique, échographie · <b>Orientation :</b> gastro-entérologie / chirurgie selon la situation</div></div>
+    <div class="fiche"><div class="nom">Maladie inflammatoire chronique de l'intestin (MICI)</div><div class="clair">Maladie provoquant une inflammation chronique d'une partie du tube digestif.</div><div class="ligne"><b>Mots :</b> Crohn, rectocolite hémorragique, poussée, rémission · <b>Orientation :</b> gastro-entérologie</div></div>
+
+    <div class="cat-label">🚻 REINS ET APPAREIL URINAIRE</div>
+    <div class="fiche"><div class="nom">Cystite / infection urinaire basse</div><div class="clair">Infection touchant principalement la vessie.</div><div class="ligne"><b>Mots :</b> brûlures urinaires, envies fréquentes, ECBU · <b>Plus fréquente chez :</b> les femmes · <b>Orientation :</b> médecin traitant</div></div>
+    <div class="fiche"><div class="nom">Pyélonéphrite</div><div class="clair">Infection touchant un rein.</div><div class="ligne"><b>Mots :</b> infection urinaire, fièvre, douleur lombaire, ECBU · <b>Orientation :</b> prise en charge médicale rapide selon la situation</div></div>
+    <div class="fiche"><div class="nom">Calculs urinaires / lithiase urinaire</div><div class="clair">Formation de "calculs" dans les voies urinaires.</div><div class="ligne"><b>Mots :</b> calcul, colique néphrétique, douleur lombaire, scanner · <b>Orientation :</b> médecin traitant / urologie</div></div>
+    <div class="fiche"><div class="nom">Insuffisance rénale chronique</div><div class="clair">Diminution durable du fonctionnement des reins.</div><div class="ligne"><b>Mots :</b> fonction rénale, créatinine, DFG, dialyse · <b>Orientation :</b> médecin traitant / néphrologue</div></div>
+
+    <div class="cat-label">🩸 MÉTABOLISME ET HORMONES</div>
+    <div class="fiche"><div class="nom">Diabète de type 2</div><div class="clair">Maladie chronique caractérisée par un excès durable de glucose dans le sang.</div><div class="ligne"><b>Mots :</b> glycémie, hyperglycémie, HbA1c · <b>Orientation :</b> médecin traitant / diabétologie-endocrinologie</div></div>
+    <div class="fiche"><div class="nom">Diabète de type 1</div><div class="clair">Maladie dans laquelle l'organisme ne produit plus suffisamment d'insuline, nécessitant un traitement par insuline.</div><div class="ligne"><b>Mots :</b> insuline, glycémie, hypoglycémie, hyperglycémie · <b>Orientation :</b> diabétologie / endocrinologie</div></div>
+    <div class="fiche"><div class="nom">Hypothyroïdie</div><div class="clair">Fonctionnement insuffisant de la glande thyroïde.</div><div class="ligne"><b>Mots :</b> thyroïde, TSH, hormones thyroïdiennes · <b>Orientation :</b> médecin traitant / endocrinologue</div></div>
+    <div class="fiche"><div class="nom">Hyperthyroïdie</div><div class="clair">Fonctionnement excessif de la thyroïde.</div><div class="ligne"><b>Mots :</b> thyroïde, TSH, palpitations, amaigrissement · <b>Orientation :</b> médecin traitant / endocrinologue</div></div>
+    <div class="fiche"><div class="nom">Obésité</div><div class="clair">Maladie chronique caractérisée par une accumulation excessive de graisse corporelle pouvant affecter la santé.</div><div class="ligne"><b>Mots :</b> IMC, poids, nutrition, métabolisme · <b>Orientation :</b> médecin traitant / prise en charge spécialisée</div></div>
+
+    <div class="cat-label">🦴 OS, ARTICULATIONS ET DOS</div>
+    <div class="fiche"><div class="nom">Arthrose</div><div class="clair">Maladie d'une articulation associée notamment à une dégradation du cartilage.</div><div class="ligne"><b>Mots :</b> douleur, raideur, genou, hanche, cartilage · <b>Orientation :</b> médecin traitant / rhumatologue / orthopédie</div></div>
+    <div class="fiche"><div class="nom">Lombalgie</div><div class="clair">Douleur située dans le bas du dos.</div><div class="ligne"><b>Mots :</b> lombaires, douleur, rachis · <b>Orientation :</b> médecin traitant / rhumatologie</div></div>
+    <div class="fiche"><div class="nom">Sciatique</div><div class="clair">Douleur suivant le trajet du nerf sciatique, souvent depuis le bas du dos vers la jambe.</div><div class="ligne"><b>Mots :</b> lombaire, jambe, nerf sciatique · <b>Orientation :</b> médecin traitant / spécialiste selon la situation</div></div>
+    <div class="fiche"><div class="nom">Ostéoporose</div><div class="clair">Maladie fragilisant les os et augmentant le risque de fracture.</div><div class="ligne"><b>Mots :</b> densité osseuse, fracture, ostéodensitométrie · <b>Orientation :</b> médecin traitant / rhumatologue</div></div>
+    <div class="fiche"><div class="nom">Polyarthrite rhumatoïde</div><div class="clair">Maladie inflammatoire chronique touchant plusieurs articulations.</div><div class="ligne"><b>Mots :</b> inflammation, articulations, poussée, raideur · <b>Orientation :</b> rhumatologue</div></div>
+
+    <div class="cat-label">👂👁️ ORL ET YEUX</div>
+    <div class="fiche"><div class="nom">Otite</div><div class="clair">Inflammation ou infection de l'oreille selon le type d'otite.</div><div class="ligne"><b>Mots :</b> oreille, douleur, tympan · <b>Plus fréquente chez :</b> l'enfant pour certaines formes · <b>Orientation :</b> médecin traitant / ORL</div></div>
+    <div class="fiche"><div class="nom">Sinusite</div><div class="clair">Inflammation des sinus.</div><div class="ligne"><b>Mots :</b> sinus, nez, douleur faciale, congestion · <b>Orientation :</b> médecin traitant / ORL</div></div>
+    <div class="fiche"><div class="nom">Cataracte</div><div class="clair">Opacification progressive du cristallin qui diminue la vision.</div><div class="ligne"><b>Concerne :</b> œil · <b>Mots :</b> cristallin, baisse de vision, chirurgie · <b>Orientation :</b> ophtalmologue</div></div>
+    <div class="fiche"><div class="nom">Glaucome</div><div class="clair">Maladie pouvant endommager progressivement le nerf optique et la vision.</div><div class="ligne"><b>Mots :</b> pression intraoculaire, champ visuel, nerf optique · <b>Orientation :</b> ophtalmologue</div></div>
+
+    <div class="cat-label">🧴 PEAU</div>
+    <div class="fiche"><div class="nom">Eczéma</div><div class="clair">Affection inflammatoire de la peau pouvant provoquer rougeurs et démangeaisons.</div><div class="ligne"><b>Mots :</b> prurit, rougeur, plaques, dermatite · <b>Orientation :</b> médecin traitant / dermatologue</div></div>
+    <div class="fiche"><div class="nom">Psoriasis</div><div class="clair">Maladie inflammatoire chronique de la peau évoluant souvent par poussées.</div><div class="ligne"><b>Mots :</b> plaques, squames, poussée, rémission · <b>Orientation :</b> dermatologue</div></div>
+
+    <div class="cat-label">🧠 SANTÉ PSYCHIQUE</div>
+    <div class="fiche"><div class="nom">Dépression</div><div class="clair">Trouble de santé caractérisé notamment par une tristesse ou une perte d'intérêt persistantes et un retentissement sur la vie quotidienne.</div><div class="ligne"><b>Mots :</b> humeur, perte d'intérêt, fatigue, sommeil · <b>Orientation :</b> médecin traitant / psychiatre</div></div>
+    <div class="fiche"><div class="nom">Trouble anxieux</div><div class="clair">Anxiété ou inquiétude importante, persistante ou répétée, pouvant perturber la vie quotidienne.</div><div class="ligne"><b>Mots :</b> anxiété, angoisse, panique · <b>Orientation :</b> médecin traitant / professionnel de santé mentale</div></div>
+
+    <div class="cat-label">♀️ SANTÉ GYNÉCOLOGIQUE</div>
+    <div class="fiche"><div class="nom">Endométriose</div><div class="clair">Maladie dans laquelle du tissu semblable à la muqueuse de l'utérus se développe en dehors de l'utérus.</div><div class="ligne"><b>Mots :</b> douleurs pelviennes, règles douloureuses · <b>Orientation :</b> médecin / gynécologue</div></div>
+    <div class="fiche"><div class="nom">Fibrome utérin</div><div class="clair">Tumeur bénigne développée dans l'utérus.</div><div class="ligne"><b>Mots :</b> fibrome, utérus, saignements, échographie · <b>Orientation :</b> gynécologue</div></div>
+
+    <div class="cat-label">🦠 SITUATIONS TRÈS COURANTES</div>
+    <div class="fiche"><div class="nom">Grippe</div><div class="clair">Infection respiratoire provoquée par les virus influenza.</div><div class="ligne"><b>Mots :</b> fièvre, courbatures, toux, vaccination · <b>Orientation :</b> médecin traitant selon la situation</div></div>
+    <div class="fiche"><div class="nom">COVID-19</div><div class="clair">Maladie infectieuse provoquée par le coronavirus SARS-CoV-2, touchant notamment l'appareil respiratoire mais pouvant avoir d'autres manifestations.</div><div class="ligne"><b>Mots :</b> SARS-CoV-2, test, symptômes respiratoires · <b>Orientation :</b> selon la situation clinique</div></div>
+    <div class="fiche"><div class="nom">Allergie</div><div class="clair">Réaction excessive du système immunitaire à une substance normalement tolérée.</div><div class="ligne"><b>Mots :</b> allergène, rhinite, urticaire · <b>Orientation :</b> médecin traitant / allergologue</div></div>
+
+    <div class="cat-label">🎗️ CANCÉROLOGIE — NOTIONS INDISPENSABLES</div>
+    <div class="fiche"><div class="nom">Cancer</div><div class="clair">Maladie liée à la multiplication incontrôlée de cellules anormales. Il existe de nombreux cancers différents.</div><div class="ligne"><b>Mots :</b> tumeur maligne, biopsie, oncologie, chimiothérapie, radiothérapie · <b>Orientation :</b> parcours dépendant du cancer / oncologie</div></div>
+    <div class="fiche"><div class="nom">Tumeur bénigne</div><div class="clair">Masse de cellules anormales qui n'est pas cancéreuse. Peut néanmoins nécessiter une surveillance ou un traitement.</div><div class="ligne"><b>Mots :</b> bénin, nodule, masse, surveillance · <b>Orientation :</b> dépend de l'organe concerné</div></div>
+    <div class="fiche"><div class="nom">Métastase</div><div class="clair">Développement de cellules cancéreuses à distance de la tumeur d'origine.</div><div class="ligne"><b>Mots :</b> cancer, tumeur primitive, secondaire, bilan d'extension · <b>Orientation :</b> oncologie et spécialités concernées</div></div>
+
+  </div>
+
+  <div class="aucun" id="aucun">Aucune pathologie ne correspond à votre recherche.</div>
+
+  <div class="rappel">
+    Comprendre pour mieux accueillir, organiser et orienter — <strong>jamais pour diagnostiquer ou soigner.</strong>
+  </div>
+
+  <footer>MEDEXPERT · PRAXIS · RNCP 40800</footer>
+</div>
+
+<script>
+function filtrer(){
+  const q = document.getElementById('recherche').value.toLowerCase().trim();
+  const fiches = document.querySelectorAll('.fiche');
+  const cats = document.querySelectorAll('.cat-label');
+  let visibles = 0;
+
+  fiches.forEach(function(f){
+    const texte = f.textContent.toLowerCase();
+    const match = texte.includes(q);
+    f.classList.toggle('hidden', !match);
+    if(match) visibles++;
+  });
+
+  cats.forEach(function(cat){
+    let el = cat.nextElementSibling;
+    let aUnVisible = false;
+    while(el && el.classList.contains('fiche')){
+      if(!el.classList.contains('hidden')) aUnVisible = true;
+      el = el.nextElementSibling;
+    }
+    cat.style.display = aUnVisible ? '' : 'none';
+  });
+
+  document.getElementById('aucun').style.display = visibles === 0 ? 'block' : 'none';
+  document.getElementById('compteur').textContent = q ? visibles + ' résultat(s)' : '';
+}
+</script>
+</body>
+</html>
