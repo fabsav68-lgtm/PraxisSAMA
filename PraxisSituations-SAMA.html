@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PraxisSAMA · Situations professionnelles</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbfaff; --bg2:#f4f3fe; --panel:#ffffff; --bdr:#e4e2f7;
+  --txt:#211f38; --txt2:#726f96; --indigo:#6366f1; --indigo-dk:#4338ca;
+  --gold:#f5a623; --red:#e8604a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Poppins',system-ui,sans-serif;
+  background:linear-gradient(160deg,var(--bg) 0%,var(--bg2) 100%);
+  color:var(--txt);min-height:100vh;padding-bottom:60px;
+}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+
+.topbar{display:flex;align-items:center;gap:10px;padding:20px 0 6px}
+.back-link{display:flex;align-items:center;gap:6px;color:var(--txt2);text-decoration:none;font-size:13px}
+.back-link svg{width:20px;height:20px}
+
+header{padding:16px 0 20px}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;letter-spacing:1px;color:var(--indigo-dk);background:rgba(99,102,241,.1);
+  border:1px solid rgba(99,102,241,.3);padding:5px 12px;border-radius:20px;margin-bottom:12px;
+}
+h1{font-weight:700;font-size:clamp(24px,5.5vw,32px);letter-spacing:-.3px}
+.tagline{color:var(--txt2);font-size:14px;margin-top:8px;max-width:480px;line-height:1.6}
+
+.selecteur{margin:22px 0 6px}
+select{
+  width:100%;padding:13px 16px;border-radius:12px;border:1.5px solid var(--bdr);
+  background:var(--panel);color:var(--txt);font-size:14.5px;font-family:'Poppins',sans-serif;
+  box-shadow:0 2px 10px rgba(67,56,202,.06);
+}
+
+.situation-card{
+  background:var(--panel);border:1.5px solid var(--indigo);border-radius:16px;
+  padding:20px;margin-top:18px;box-shadow:0 2px 12px rgba(67,56,202,.06);
+}
+.situation-label{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:1px;color:var(--indigo-dk);margin-bottom:8px}
+.situation-titre{font-weight:700;font-size:18px;margin-bottom:10px}
+.situation-texte{font-size:13.5px;color:var(--txt);line-height:1.6}
+
+.chat{margin-top:18px;display:flex;flex-direction:column;gap:12px}
+.bulle-wrap{display:flex;flex-direction:column;max-width:82%}
+.bulle-wrap.moi{align-self:flex-end;align-items:flex-end}
+.bulle-wrap.autre{align-self:flex-start;align-items:flex-start}
+.bulle-nom{font-size:11px;color:var(--txt2);margin-bottom:3px;padding:0 4px;font-weight:600}
+.bulle{padding:11px 15px;border-radius:16px;font-size:13.5px;line-height:1.5}
+.bulle-wrap.moi .bulle{background:var(--indigo-dk);color:#fff;border-bottom-right-radius:4px}
+.bulle-wrap.autre .bulle{background:var(--bg2);color:var(--txt);border:1px solid var(--bdr);border-bottom-left-radius:4px}
+
+.reg-card{background:var(--panel);border:1.5px solid var(--bdr);border-radius:14px;overflow:hidden;margin-top:12px;box-shadow:0 2px 10px rgba(67,56,202,.05)}
+.reg-head{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}
+.reg-icon{font-size:19px;flex-shrink:0}
+.reg-title{font-weight:600;font-size:14.5px}
+.reg-chevron{margin-left:auto;color:var(--txt2);transition:transform .2s}
+.reg-card.open .reg-chevron{transform:rotate(90deg)}
+.reg-body{display:none;padding:0 16px 15px 47px;font-size:13px;color:var(--txt2);line-height:1.65}
+.reg-card.open .reg-body{display:block}
+
+footer{text-align:center;padding:30px 20px 10px;color:var(--txt2);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <a class="back-link" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      PraxisSAMA
+    </a>
+  </div>
+
+  <header>
+    <div class="badge">SITUATIONS PROFESSIONNELLES</div>
+    <h1>21 situations, façon jury</h1>
+    <p class="tagline">Accueil physique et téléphonique, gestion des situations difficiles — le format réel de l'épreuve orale.</p>
+  </header>
+
+  <div class="selecteur">
+    <select id="choix" onchange="afficher()"></select>
+  </div>
+
+  <div id="contenu"></div>
+
+  <footer>MEDEXPERT · PRAXIS · RNCP 40800</footer>
+</div>
+
+<script>
+const SITUATIONS = [
+{ccp:"CCP1", titre:"Douleur thoracique au téléphone",
+ situation:"M. Faucher appelle le secrétariat de cardiologie. Il explique ressentir depuis quelques minutes une douleur thoracique importante et demande si c'est son cœur.",
+ dialogue:[
+   ["autre","M. Faucher","J'ai mal à la poitrine depuis tout à l'heure, vous pensez que c'est mon cœur ?"],
+   ["moi","SAMA","Je ne peux pas établir de diagnostic, monsieur Faucher, mais je prends votre appel très au sérieux. Restez en ligne, je vais immédiatement appliquer la procédure prévue pour ce type de situation."],
+   ["autre","M. Faucher","D'accord... je fais quoi en attendant ?"],
+   ["moi","SAMA","Restez assis, ne raccrochez pas, je vous mets en relation tout de suite avec la personne compétente."],
+ ],
+ conduite:"Ne jamais établir de diagnostic ni rassurer à tort ; reconnaître qu'une douleur thoracique brutale peut relever de l'urgence ; appliquer immédiatement la procédure prévue par la structure plutôt que de proposer un rendez-vous classique.",
+ evaluation:"Comment distinguer une demande administrative ordinaire d'une situation potentiellement urgente ? Quelles paroles éviter en attendant la prise en charge ? Pourquoi ne jamais confirmer ni infirmer un diagnostic au téléphone ?",
+ debriefing:"Demander au candidat ce qu'il aurait fait si la ligne avait été coupée, et comment il aurait documenté l'appel ensuite."},
+
+{ccp:"CCP1", titre:"Le patient qui hausse le ton",
+ situation:"M. Klein se présente à l'accueil, visiblement énervé, car son rendez-vous a été déplacé sans qu'il en soit informé à l'avance.",
+ dialogue:[
+   ["autre","M. Klein","(ton élevé) C'est n'importe quoi, j'ai posé une demi-journée de congé pour rien !"],
+   ["moi","SAMA","Je comprends votre contrariété, monsieur Klein, c'est effectivement gênant. Je regarde immédiatement ce qui s'est passé avec votre dossier."],
+   ["autre","M. Klein","Ça ne me rend pas ma matinée !"],
+   ["moi","SAMA","Vous avez raison de le signaler. Voyons ensemble le prochain créneau qui pourrait vous convenir, et je note l'incident."],
+ ],
+ conduite:"Ne jamais répondre à l'agressivité par l'agressivité ; valider l'émotion sans se justifier de façon excessive ; proposer une solution concrète plutôt que de s'arrêter sur la recherche d'un responsable.",
+ evaluation:"Comment désamorcer une colère légitime sans se laisser déstabiliser ? À quel moment proposer une solution plutôt que continuer à s'excuser ?",
+ debriefing:"Interroger le candidat sur ce qu'il aurait fait si M. Klein avait continué à hausser le ton malgré tout."},
+
+{ccp:"CCP1", titre:"Le conjoint qui veut savoir",
+ situation:"Un homme téléphone au secrétariat et demande si son épouse a bien consulté le médecin ce matin.",
+ dialogue:[
+   ["autre","Appelant","Bonjour, c'est le mari de Mme Bellec, elle a bien vu le docteur ce matin ?"],
+   ["moi","SAMA","Je ne suis pas en mesure de confirmer ou d'infirmer la présence d'un patient, même à un proche, sans son accord explicite."],
+   ["autre","Appelant","Mais enfin, je suis son mari !"],
+   ["moi","SAMA","Je comprends, mais cette règle s'applique justement pour protéger la confidentialité de chacun. Je vous invite à voir directement avec elle."],
+ ],
+ conduite:"Le lien familial, même réel, n'autorise pas la transmission d'une information de santé sans cadre l'y autorisant ; rester ferme sur le principe tout en restant courtois.",
+ evaluation:"Pourquoi la simple présence d'un patient est-elle déjà une donnée protégée ? Comment refuser sans braquer l'interlocuteur ?",
+ debriefing:"Demander comment la réponse aurait différé si l'appelant s'était présenté comme un professionnel de santé."},
+
+{ccp:"CCP1", titre:"Deux patients, un seul nom",
+ situation:"Mme Roussel se présente à l'accueil. Le logiciel affiche deux patientes portant exactement le même nom et prénom.",
+ dialogue:[
+   ["moi","SAMA","Bonjour madame, pourriez-vous me confirmer votre date de naissance et votre adresse, s'il vous plaît ?"],
+   ["autre","Mme Roussel","Bien sûr, née le 12 mars, j'habite rue des Tilleuls."],
+   ["moi","SAMA","(vérifie) Merci, c'est bien noté, je vous installe dans le bon dossier."],
+ ],
+ conduite:"Ne jamais ouvrir un dossier sur la seule base du nom ; vérifier systématiquement plusieurs traits d'identité (date de naissance, adresse) avant toute action sur le dossier.",
+ evaluation:"Quels traits d'identité permettent de lever un doute d'homonymie ? Que faire si les deux patientes ont aussi la même date de naissance ?",
+ debriefing:"Faire réfléchir sur les conséquences possibles d'une erreur d'identité non détectée à ce stade."},
+
+{ccp:"CCP1", titre:"La personne malentendante",
+ situation:"Mme Aubert, malentendante, se présente pour un rendez-vous. Elle lit partiellement sur les lèvres.",
+ dialogue:[
+   ["moi","SAMA","(en articulant, face à elle) Bonjour madame Aubert, le docteur va vous recevoir dans cinq minutes."],
+   ["autre","Mme Aubert","(hoche la tête) Merci, je patiente ici ?"],
+   ["moi","SAMA","Oui, je viendrai vous chercher moi-même quand ce sera le moment, pour être sûre que vous m'ayez bien vue."],
+ ],
+ conduite:"Se placer face à la personne, dans la lumière ; articuler sans exagérer ni crier ; anticiper les moments où un contact visuel direct sera nécessaire plutôt que d'appeler à voix haute dans la salle d'attente.",
+ evaluation:"Pourquoi appeler simplement le nom dans la salle d'attente ne suffit-il pas ici ? Comment vérifier la bonne compréhension sans être infantilisant ?",
+ debriefing:"Demander comment adapter l'accueil si aucun interprète n'est disponible pour une personne sourde signante."},
+
+{ccp:"CCP1", titre:"L'adolescent et ses parents",
+ situation:"Un adolescent de 16 ans consulte seul. Ses parents téléphonent ensuite pour connaître le motif de la consultation.",
+ dialogue:[
+   ["autre","Parent","Bonjour, mon fils a rendez-vous chez vous cet après-midi, pouvez-vous me dire pourquoi ?"],
+   ["moi","SAMA","Je ne peux pas vous communiquer le motif de la consultation sans l'accord de votre fils, même en tant que parent."],
+   ["autre","Parent","C'est mon fils, j'ai bien le droit de savoir !"],
+   ["moi","SAMA","Je comprends votre inquiétude. Ce sujet se règle avec le médecin ou directement avec votre fils, selon le cadre applicable à son âge."],
+ ],
+ conduite:"Ne jamais transmettre d'information médicale sur un mineur sans vérifier le cadre légal applicable ; ne pas décider seul(e) de ce qui peut être dit selon l'âge du patient.",
+ evaluation:"Pourquoi l'âge du patient change-t-il la réponse à apporter ? Vers qui orienter ce type de question délicate ?",
+ debriefing:"Interroger sur la différence de posture si l'adolescent avait eu 10 ans plutôt que 16."},
+
+{ccp:"CCP1", titre:"Le rendez-vous « urgent »",
+ situation:"Une patiente téléphone en demandant un rendez-vous « en urgence », sans donner davantage de précision.",
+ dialogue:[
+   ["autre","Patiente","J'ai vraiment besoin d'un rendez-vous en urgence, aujourd'hui si possible !"],
+   ["moi","SAMA","Je comprends, pouvez-vous me dire ce qui motive cette urgence, pour que je puisse orienter votre demande correctement ?"],
+   ["autre","Patiente","J'ai une douleur au ventre depuis hier soir, de plus en plus forte."],
+   ["moi","SAMA","Merci pour cette précision, je transmets immédiatement selon la procédure prévue pour ce type de symptôme."],
+ ],
+ conduite:"Ne jamais accorder un créneau « urgent » sans recueillir un minimum d'informations ; ne pas établir de diagnostic à partir de ces informations, seulement orienter selon la procédure.",
+ evaluation:"Pourquoi le mot « urgent » seul ne suffit-il pas à traiter la demande ? Quelles informations recueillir sans dépasser son rôle ?",
+ debriefing:"Demander ce qui aurait changé si la patiente avait refusé de préciser le motif."},
+
+{ccp:"CCP2", titre:"Le résultat qui inquiète",
+ situation:"Une patiente rappelle après avoir reçu un compte rendu mentionnant une « lésion suspecte » et demande si c'est un cancer.",
+ dialogue:[
+   ["autre","Patiente","J'ai reçu mon résultat, il y a écrit « lésion suspecte »... c'est un cancer, n'est-ce pas ?"],
+   ["moi","SAMA","Je comprends votre inquiétude, mais je ne suis pas en mesure d'interpréter ce terme à votre place. Le médecin vous a demandé de reprendre rendez-vous rapidement : c'est lui qui pourra vous expliquer précisément ce que cela signifie pour vous."],
+   ["autre","Patiente","Vous ne pouvez vraiment rien me dire ?"],
+   ["moi","SAMA","Je peux en revanche vous trouver un rendez-vous dès que possible, pour que vous ayez une réponse claire rapidement."],
+ ],
+ conduite:"Accueillir l'inquiétude sans la minimiser ni la confirmer ; ne jamais interpréter un terme médical pour le patient ; agir concrètement sur ce qui relève du SAMA (organiser le rendez-vous).",
+ evaluation:"Comment rester humain face à l'angoisse sans sortir de son champ de compétence ? Que faire concrètement plutôt que de simplement dire « je ne sais pas » ?",
+ debriefing:"Demander comment reformuler la réponse si la patiente se mettait à pleurer au téléphone."},
+
+{ccp:"CCP2", titre:"Le document dans le mauvais dossier",
+ situation:"Le SAMA remarque qu'un compte rendu concernant Mme Dupuis a été enregistré par erreur dans le dossier de Mme Dupuy.",
+ dialogue:[
+   ["moi","SAMA","(à la collègue) J'ai trouvé une erreur : le compte rendu de Mme Dupuis est dans le dossier de Mme Dupuy, je m'en occupe tout de suite."],
+   ["autre","Collègue","Tu peux juste le déplacer discrètement, non ?"],
+   ["moi","SAMA","Non, il faut que je suive la procédure de signalement, même si ça prend un peu plus de temps — c'est justement fait pour ce genre de cas."],
+ ],
+ conduite:"Ne jamais corriger une erreur d'identitovigilance « discrètement » ; toujours suivre la procédure de signalement et de correction prévue, même sous la pression d'aller plus vite.",
+ evaluation:"Pourquoi une correction informelle est-elle risquée, même bien intentionnée ? Que se passerait-il si l'erreur n'était pas tracée ?",
+ debriefing:"Demander ce qu'il faudrait faire si l'erreur n'était découverte qu'après l'envoi du document au mauvais destinataire."},
+
+{ccp:"CCP2", titre:"La clé USB et le dossier complet",
+ situation:"Une patiente se présente à l'accueil avec une clé USB et demande que « tout son dossier médical » y soit copié immédiatement.",
+ dialogue:[
+   ["autre","Patiente","Je voudrais que vous me copiiez tout mon dossier sur cette clé, s'il vous plaît."],
+   ["moi","SAMA","Je comprends votre demande. L'accès au dossier suit une procédure particulière, que je vais vous expliquer, pour que ce soit fait dans de bonnes conditions."],
+   ["autre","Patiente","Ça ne peut pas se faire là, maintenant ?"],
+   ["moi","SAMA","Pas de cette façon, non — mais je peux enclencher la démarche dès aujourd'hui avec vous."],
+ ],
+ conduite:"Ne jamais copier un dossier de façon impromptue, même à la demande du patient concerné ; expliquer la procédure d'accès plutôt que de refuser sèchement ou d'accepter sans cadre.",
+ evaluation:"Pourquoi une demande légitime du patient ne justifie-t-elle pas de s'affranchir de toute procédure ? Comment rester accueillant tout en refusant l'immédiateté ?",
+ debriefing:"Demander comment la réponse changerait si la demande venait d'un tiers se présentant comme mandataire de la patiente."},
+
+{ccp:"CCP2", titre:"Le mot de passe du « nouveau technicien »",
+ situation:"Une personne inconnue se présente derrière le comptoir en se disant technicien informatique et demande le mot de passe du SAMA pour « tester le logiciel ».",
+ dialogue:[
+   ["autre","Inconnu","Bonjour, je suis le nouveau technicien, j'ai besoin de votre mot de passe pour vérifier une mise à jour."],
+   ["moi","SAMA","Je ne communique jamais mes identifiants personnels, quelle que soit la demande. Je vais vérifier votre identité auprès de mon responsable avant toute chose."],
+   ["autre","Inconnu","Ça va prendre du temps pour rien..."],
+   ["moi","SAMA","C'est la procédure, et elle s'applique à tout le monde, sans exception."],
+ ],
+ conduite:"Ne jamais communiquer un identifiant personnel, y compris sous prétexte technique ou hiérarchique apparent ; vérifier l'identité du demandeur avant tout accès, sans se laisser presser.",
+ evaluation:"Pourquoi les accès nominatifs sont-ils une règle non négociable ? Comment refuser sans provoquer un conflit inutile ?",
+ debriefing:"Demander ce qu'il faudrait faire si la personne insistait en citant le nom du médecin responsable."},
+
+{ccp:"CCP2", titre:"Le patient qui filme",
+ situation:"Un patient mécontent sort son téléphone et commence à filmer le personnel, tout en exigeant immédiatement son dossier médical complet.",
+ dialogue:[
+   ["autre","Patient","(filme) Je veux mon dossier tout de suite, sinon je mets ça en ligne !"],
+   ["moi","SAMA","Je reste à votre disposition pour vous expliquer comment obtenir votre dossier, dans le cadre habituel."],
+   ["autre","Patient","Je n'ai pas de temps à perdre avec vos procédures !"],
+   ["moi","SAMA","Je comprends votre impatience, mais je vais continuer à vous répondre calmement et professionnellement, comme pour toute demande."],
+ ],
+ conduite:"Garder une attitude professionnelle et calme quelle que soit la provocation ; ne pas entrer en confrontation ; ne pas céder sur la procédure sous la pression ou la menace.",
+ evaluation:"Comment maintenir son calme face à une situation filmée et potentiellement humiliante ? Pourquoi céder à la pression serait contre-productif ?",
+ debriefing:"Demander comment le candidat aurait géré la situation si un responsable n'avait pas été disponible immédiatement."},
+
+{ccp:"CCP2", titre:"Le compte rendu mal transcrit",
+ situation:"En transcrivant un compte rendu dicté, le SAMA hésite entre « insuffisance cardiaque » et « insuffisance rénale », mal compris à l'enregistrement.",
+ dialogue:[
+   ["moi","SAMA","(au médecin) Je n'ai pas bien saisi un terme sur votre dictée, pouvez-vous confirmer : insuffisance cardiaque ou rénale ?"],
+   ["autre","Médecin","Cardiaque, pourquoi ?"],
+   ["moi","SAMA","Le terme n'était pas clair sur l'enregistrement, je préfère vérifier plutôt que de risquer une erreur dans le dossier."],
+ ],
+ conduite:"Ne jamais deviner un terme médical incertain ; toujours vérifier auprès du professionnel plutôt que d'introduire une information potentiellement fausse dans un document médical.",
+ evaluation:"Pourquoi une hésitation de ce type ne doit-elle jamais être tranchée seul(e) ? Quelles conséquences une erreur de transcription peut-elle avoir ?",
+ debriefing:"Demander ce qu'il faudrait faire si le médecin n'était pas immédiatement joignable et que le courrier devait partir rapidement."},
+
+{ccp:"CCP1", titre:"Le double rendez-vous",
+ situation:"Le SAMA découvre que deux patients ont été programmés par erreur sur le même créneau avec le même médecin.",
+ dialogue:[
+   ["moi","SAMA","(au médecin) J'ai remarqué que deux patients sont prévus sur le même créneau à 14h, je vais les recontacter pour proposer une solution."],
+   ["autre","Médecin","D'accord, tiens-moi au courant si besoin."],
+   ["moi","SAMA","(au téléphone, patient 1) Bonjour, je vous appelle car une erreur de planning s'est glissée sur votre rendez-vous. Puis-je vous proposer un autre créneau proche ?"],
+ ],
+ conduite:"Ne jamais laisser le médecin découvrir le problème à l'arrivée des patients ; rechercher activement une solution et informer les personnes concernées avec transparence sur l'origine de l'erreur.",
+ evaluation:"Pourquoi la transparence sur l'erreur est-elle préférable à la dissimulation ? Comment prioriser lequel des deux patients contacter en premier ?",
+ debriefing:"Demander comment gérer la situation si les deux patients refusaient tout autre créneau que celui prévu."},
+
+{ccp:"CCP1", titre:"L'appel qui parle trop vite",
+ situation:"Une personne appelle et débite très rapidement de nombreuses informations sur son état de santé et sa demande, sans reprendre son souffle.",
+ dialogue:[
+   ["autre","Appelant","(débit rapide) Voilà j'ai rendez-vous jeudi mais en fait je dois partir donc il faudrait avancer et en plus j'ai oublié de dire au docteur que..."],
+   ["moi","SAMA","Je vous arrête une seconde pour être sûr de bien tout noter : vous souhaitez avancer votre rendez-vous de jeudi, c'est bien ça ?"],
+   ["autre","Appelant","Oui c'est ça, pardon je parle vite."],
+   ["moi","SAMA","Pas de souci, reprenons calmement point par point."],
+ ],
+ conduite:"Reformuler pour vérifier la compréhension plutôt que de mémoriser sans confirmer ; interrompre poliment si nécessaire pour sécuriser l'information plutôt que de risquer une erreur de transmission.",
+ evaluation:"Pourquoi la reformulation est-elle essentielle même si cela ralentit l'appel ? Comment interrompre sans paraître impoli ?",
+ debriefing:"Demander comment gérer un appelant qui s'agace d'être interrompu pour reformulation."},
+
+{ccp:"CCP1", titre:"La salle d'attente qui s'affole",
+ situation:"Pendant que le SAMA répond au téléphone, une personne en salle d'attente crie que son accompagnant vient de s'effondrer.",
+ dialogue:[
+   ["autre","Personne","(crie) Venez vite, il vient de s'effondrer !"],
+   ["moi","SAMA","(au téléphone) Je dois vous laisser immédiatement, je vous rappelle dans un instant."],
+   ["moi","SAMA","(à la salle d'attente) J'arrive, je préviens le médecin tout de suite."],
+ ],
+ conduite:"Interrompre immédiatement toute tâche administrative en cours face à une situation potentiellement vitale ; sécuriser correctement l'appel en cours plutôt que de raccrocher brutalement.",
+ evaluation:"Pourquoi cette situation prime-t-elle sur toute autre tâche en cours ? Comment terminer l'appel de façon correcte malgré l'urgence ?",
+ debriefing:"Demander comment le candidat aurait réagi si deux situations urgentes s'étaient produites simultanément."},
+
+{ccp:"CCP1", titre:"Le patient qui ne parle pas français",
+ situation:"Un patient maîtrisant très peu le français se présente à l'accueil pour un premier rendez-vous, sans accompagnant.",
+ dialogue:[
+   ["autre","Patient","(hésitant) Bonjour... rendez-vous... docteur..."],
+   ["moi","SAMA","(parle lentement, gestes simples) Bonjour. Votre nom, s'il vous plaît ?"],
+   ["autre","Patient","(montre une carte d'identité)"],
+   ["moi","SAMA","Merci. Je vais voir comment mieux communiquer avec vous pour la suite."],
+ ],
+ conduite:"Rechercher activement un moyen de communication adapté (documents traduits, outils disponibles dans la structure) plutôt que de renvoyer le patient ou de parler plus fort sans effet.",
+ evaluation:"Quelles ressources mobiliser en l'absence d'interprète ? Pourquoi refuser purement et simplement la prise en charge serait inapproprié ?",
+ debriefing:"Demander comment la situation changerait si le patient venait avec son enfant proposant spontanément de traduire."},
+
+{ccp:"CCP2", titre:"Le courrier envoyé au mauvais endroit",
+ situation:"Une secrétaire s'apprête à envoyer un compte rendu par courriel : elle vérifie le nom du patient sur le document mais pas l'adresse email du destinataire.",
+ dialogue:[
+   ["autre","Collègue","Tu peux l'envoyer, c'est bon, j'ai vérifié le nom du patient."],
+   ["moi","SAMA","Le nom du patient, oui, mais as-tu vérifié que l'adresse email est bien celle du bon destinataire ?"],
+   ["autre","Collègue","Ah... pas encore, tu as raison, je vérifie."],
+ ],
+ conduite:"Vérifier systématiquement le destinataire d'un envoi contenant des données de santé, pas seulement le contenu du document lui-même.",
+ evaluation:"Pourquoi le contrôle du contenu ne suffit-il pas sans contrôle du destinataire ? Que faire si l'erreur est découverte après l'envoi ?",
+ debriefing:"Demander la procédure à suivre si un courriel de données de santé venait à être envoyé au mauvais destinataire."},
+
+{ccp:"CCP2", titre:"L'employeur qui appelle",
+ situation:"Une personne se présentant comme l'employeur d'un patient téléphone pour confirmer que celui-ci avait bien un rendez-vous médical ce jour-là.",
+ dialogue:[
+   ["autre","Appelant","Bonjour, je suis l'employeur de M. Ferreira, pouvez-vous confirmer qu'il avait bien rendez-vous chez vous aujourd'hui ?"],
+   ["moi","SAMA","Je ne suis pas en mesure de confirmer la présence d'un patient dans notre structure, quelle que soit la qualité de la personne qui le demande."],
+   ["autre","Appelant","C'est juste pour une justification administrative..."],
+   ["moi","SAMA","Je comprends, mais ce document doit être demandé directement à votre salarié, pas à nous."],
+ ],
+ conduite:"Aucune qualité alléguée (employeur, famille, autorité) ne suffit à elle seule à autoriser la transmission d'une information de santé sans cadre légal l'y autorisant.",
+ evaluation:"Pourquoi la fonction de l'appelant ne change-t-elle pas la règle de confidentialité ? Vers qui orienter ce type de demande ?",
+ debriefing:"Demander comment la réponse différerait face à une réquisition judiciaire formelle plutôt qu'un simple appel."},
+
+{ccp:"CCP2", titre:"La cas de synthèse — la journée qui déborde",
+ situation:"En fin de matinée : le téléphone sonne, un patient attend pour une formalité administrative, un médecin demande un document en urgence, et une personne en salle d'attente signale que son accompagnant se sent très mal.",
+ dialogue:[
+   ["autre","Divers","(brouhaha simultané de sollicitations)"],
+   ["moi","SAMA","(priorise immédiatement) Je m'occupe d'abord de la personne qui ne va pas bien."],
+   ["moi","SAMA","(une fois la situation urgente prise en charge) Je reviens maintenant vers vous, dans l'ordre, en commençant par le document du docteur."],
+ ],
+ conduite:"Face à des sollicitations multiples, toujours faire primer une situation potentiellement urgente sur les tâches administratives, puis reprendre les autres demandes dans un ordre raisonné, en l'expliquant si nécessaire aux personnes qui attendent.",
+ evaluation:"Comment justifier calmement l'ordre de traitement choisi aux personnes qui doivent patienter ? Qu'est-ce qui distingue une urgence réelle d'une simple impression d'urgence ?",
+ debriefing:"Faire reformuler au candidat l'ordre exact qu'il choisirait pour les trois sollicitations restantes, et pourquoi."},
+
+{ccp:"CCP1", titre:"Le retard du médecin",
+ situation:"Le médecin annonce un retard important. Plusieurs patients attendent déjà depuis un moment en salle d'attente.",
+ dialogue:[
+   ["moi","SAMA","(à la salle d'attente) Mesdames, messieurs, le docteur a actuellement du retard, je vous tiens informés dès que possible."],
+   ["autre","Patient","On attend depuis 40 minutes déjà !"],
+   ["moi","SAMA","Je comprends, je vais vérifier précisément où en est le planning et revenir vers vous avec une estimation plus précise."],
+ ],
+ conduite:"Informer proactivement plutôt que de laisser les patients dans l'incertitude ; ne pas donner de fausse estimation ; revenir vers eux avec une information mise à jour plutôt que de disparaître.",
+ evaluation:"Pourquoi le silence aggrave-t-il souvent plus la situation que le retard lui-même ? Comment annoncer un retard sans dévoiler la raison médicale précise ?",
+ debriefing:"Demander comment gérer un patient qui, à cause du retard, doit absolument partir et exige d'être reçu immédiatement."},
+];
+
+function peupler(){
+  const sel = document.getElementById('choix');
+  sel.innerHTML = SITUATIONS.map((s, i) => `<option value="${i}">${s.ccp} · ${s.titre}</option>`).join('');
+}
+
+function afficher(){
+  const i = document.getElementById('choix').value;
+  const s = SITUATIONS[i];
+  const zone = document.getElementById('contenu');
+
+  const bulles = s.dialogue.map(([type, nom, texte]) => `
+    <div class="bulle-wrap ${type}">
+      <div class="bulle-nom">${nom}</div>
+      <div class="bulle">${texte}</div>
+    </div>
+  `).join('');
+
+  zone.innerHTML = `
+    <div class="situation-card">
+      <div class="situation-label">${s.ccp} · SITUATION DE SIMULATION</div>
+      <div class="situation-titre">${s.titre}</div>
+      <div class="situation-texte">${s.situation}</div>
+    </div>
+
+    <div class="chat">${bulles}</div>
+
+    <div class="reg-card" onclick="toggle(this)">
+      <div class="reg-head"><div class="reg-icon">✅</div><div class="reg-title">Conduite attendue</div><div class="reg-chevron">▶</div></div>
+      <div class="reg-body">${s.conduite}</div>
+    </div>
+    <div class="reg-card" onclick="toggle(this)">
+      <div class="reg-head"><div class="reg-icon">⚖️</div><div class="reg-title">Points d'évaluation du jury</div><div class="reg-chevron">▶</div></div>
+      <div class="reg-body">${s.evaluation}</div>
+    </div>
+    <div class="reg-card" onclick="toggle(this)">
+      <div class="reg-head"><div class="reg-icon">💬</div><div class="reg-title">Débriefing</div><div class="reg-chevron">▶</div></div>
+      <div class="reg-body">${s.debriefing}</div>
+    </div>
+  `;
+}
+
+function toggle(card){ card.classList.toggle('open'); }
+
+peupler();
+afficher();
+</script>
+</body>
+</html>
