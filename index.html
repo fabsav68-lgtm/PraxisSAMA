@@ -79,6 +79,16 @@ footer{text-align:center;padding:30px 20px 10px;color:var(--txt2);font-size:11px
     window.location.replace('acces-sama.html');
   }
 </script>
+<link rel="apple-touch-icon" href="apple-touch-icon-sama.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4338ca">
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js');
+  });
+}
+</script>
 </head>
 <body>
 <div class="wrap">
